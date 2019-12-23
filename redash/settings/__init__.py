@@ -9,7 +9,7 @@ from flask_talisman import talisman
 from .helpers import fix_assets_path, array_from_string, parse_boolean, int_or_none, set_from_string
 from .organization import DATE_FORMAT, TIME_FORMAT  # noqa
 
-REDIS_URL = os.environ.get('REDASH_REDIS_URL', os.environ.get('REDIS_URL', "redis://localhost:6379/0"))
+REDIS_URL = os.environ.get('REDASH_REDIS_URL', os.environ.get('REDIS_URL', "redis://127.0.0.1:6379/0"))
 PROXIES_COUNT = int(os.environ.get('REDASH_PROXIES_COUNT', "1"))
 
 STATSD_HOST = os.environ.get('REDASH_STATSD_HOST', "127.0.0.1")
