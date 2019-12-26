@@ -36,13 +36,13 @@ function UsersListActions({ user, enableUser, disableUser, deleteUser }) {
   }
   if (user.is_invitation_pending) {
     return (
-      <Button type="danger" className="w-100" onClick={event => deleteUser(event, user)}>Delete</Button>
+      <Button type="danger" className="w-100" onClick={event => deleteUser(event, user)}>删除</Button>
     );
   }
   return user.is_disabled ? (
-    <Button type="primary" className="w-100" onClick={event => enableUser(event, user)}>Enable</Button>
+    <Button type="primary" className="w-100" onClick={event => enableUser(event, user)}>启用</Button>
   ) : (
-    <Button className="w-100" onClick={event => disableUser(event, user)}>Disable</Button>
+    <Button className="w-100" onClick={event => disableUser(event, user)}>禁用</Button>
   );
 }
 
@@ -66,17 +66,17 @@ class UsersList extends React.Component {
     {
       key: 'active',
       href: 'users',
-      title: 'Active Users',
+      title: '活跃用户',
     },
     {
       key: 'pending',
       href: 'users/pending',
-      title: 'Pending Invitations',
+      title: '等待邀请',
     },
     {
       key: 'disabled',
       href: 'users/disabled',
-      title: 'Disabled Users',
+      title: '禁用用户',
       isAvailable: () => policy.canCreateUser(),
     },
   ];
@@ -85,24 +85,24 @@ class UsersList extends React.Component {
     Columns.custom.sortable((text, user) => (
       <UserPreviewCard user={user} withLink />
     ), {
-      title: 'Name',
+      title: '账号',
       field: 'name',
       width: null,
     }),
     Columns.custom.sortable((text, user) => map(user.groups, group => (
       <a key={'group' + group.id} className="label label-tag" href={'groups/' + group.id}>{group.name}</a>
     )), {
-      title: 'Groups',
+      title: '角色',
       field: 'groups',
     }),
     Columns.timeAgo.sortable({
-      title: 'Joined',
+      title: '添加日期',
       field: 'created_at',
       className: 'text-nowrap',
       width: '1%',
     }),
     Columns.timeAgo.sortable({
-      title: 'Last Active At',
+      title: '最后活跃时间',
       field: 'active_at',
       className: 'text-nowrap',
       width: '1%',
@@ -127,7 +127,7 @@ class UsersList extends React.Component {
   }
 
   createUser = values => User.create(values).$promise.then((user) => {
-    notification.success('Saved.');
+    notification.success('保存成功。');
     if (user.invite_link) {
       Modal.warning({ title: 'Email not sent!',
         content: (
@@ -142,7 +142,7 @@ class UsersList extends React.Component {
     }
   }).catch((error) => {
     if (!(error instanceof Error)) {
-      error = new Error(get(error, 'data.message', 'Failed saving.'));
+      error = new Error(get(error, 'data.message', '保存失败。'));
     }
     return Promise.reject(error);
   });
@@ -174,7 +174,7 @@ class UsersList extends React.Component {
       <div className="m-b-15">
         <Button type="primary" disabled={!policy.isCreateUserEnabled()} onClick={this.showCreateUserDialog}>
           <i className="fa fa-plus m-r-5" />
-          New User
+          添加用户
         </Button>
         <DynamicComponent name="UsersListExtra" />
       </div>
@@ -233,7 +233,7 @@ class UsersList extends React.Component {
 export default function init(ngModule) {
   settingsMenu.add({
     permission: 'list_users',
-    title: 'Users',
+    title: '用户管理',
     path: 'users',
     isActive: path => path.startsWith('/users') && (path !== '/users/me'),
     order: 2,

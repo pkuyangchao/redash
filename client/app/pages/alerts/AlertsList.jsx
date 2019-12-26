@@ -33,7 +33,7 @@ class AlertsList extends React.Component {
         <a className="table-main-title" href={'alerts/' + alert.id}>{alert.name}</a>
       </div>
     ), {
-      title: 'Name',
+      title: '名称',
       field: 'name',
     }),
     Columns.custom.sortable((text, alert) => (
@@ -41,16 +41,16 @@ class AlertsList extends React.Component {
         <span className={`label ${STATE_CLASS[alert.state]}`}>{toUpper(alert.state)}</span>
       </div>
     ), {
-      title: 'State',
+      title: '状态',
       field: 'state',
       width: '1%',
     }),
-    Columns.timeAgo.sortable({ title: 'Last Updated At',
+    Columns.timeAgo.sortable({ title: '最后更新日期',
       field: 'updated_at',
       className: 'text-nowrap',
       width: '1%' }),
     Columns.avatar({ field: 'user', className: 'p-l-0 p-r-0' }, name => `Created by ${name}`),
-    Columns.dateTime.sortable({ title: 'Created At',
+    Columns.dateTime.sortable({ title: '添加日期',
       field: 'created_at',
       className: 'text-nowrap',
       width: '1%' }),
@@ -68,8 +68,8 @@ class AlertsList extends React.Component {
             <EmptyState
               icon="fa fa-bell-o"
               illustration="alert"
-              description="Get notified on certain events"
-              helpLink="https://redash.io/help/user-guide/alerts/"
+              description="灵活监控运行情况"
+              helpLink=""
               showAlertStep
             />
           )}
@@ -118,7 +118,7 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/alerts',
-      title: 'Alerts',
+      title: '监控',
       key: 'alerts',
     },
   ], {

@@ -640,7 +640,7 @@ function QueryResource(
   QueryService.newQuery = function newQuery() {
     return new QueryService({
       query: '',
-      name: 'New Query',
+      name: '添加指标',
       schedule: null,
       user: currentUser,
       options: {},

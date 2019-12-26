@@ -64,7 +64,7 @@ export default class CardsList extends React.Component {
           <div className="row p-10">
             <div className="col-md-4 col-md-offset-4">
               <Search
-                placeholder="Search..."
+                placeholder="搜索..."
                 onChange={e => this.setState({ searchText: e.target.value })}
                 autoFocus
               />

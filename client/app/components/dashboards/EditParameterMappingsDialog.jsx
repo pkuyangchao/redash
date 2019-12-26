@@ -84,7 +84,7 @@ class EditParameterMappingsDialog extends React.Component {
         this.props.dialog.close(valuesChanged);
       })
       .catch(() => {
-        notification.error('Widget cannot be updated');
+        notification.error('小部件无法更新');
       })
       .finally(() => {
         this.setState({ saveInProgress: false });
@@ -100,7 +100,7 @@ class EditParameterMappingsDialog extends React.Component {
     return (
       <Modal
         {...dialog.props}
-        title="Parameters"
+        title="参数"
         onOk={() => this.saveWidget()}
         okButtonProps={{ loading: this.state.saveInProgress }}
         width={700}

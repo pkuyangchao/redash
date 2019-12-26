@@ -89,31 +89,31 @@ class Tasks extends React.Component {
       <Layout activeTab="tasks">
         <div className="p-15">
           {error && (
-            <Alert type="error" message="Failed loading status. Please refresh." />
+            <Alert type="error" message="加载失败，请刷新。" />
           )}
 
           {!error && (
             <React.Fragment>
               <Grid.Row gutter={15} className="m-b-15">
                 <Grid.Col span={8}>
-                  <CounterCard title="Active Tasks" value={counters.active} loading={isLoading} />
+                  <CounterCard title="活动任务" value={counters.active} loading={isLoading} />
                 </Grid.Col>
                 <Grid.Col span={8}>
-                  <CounterCard title="Reserved Tasks" value={counters.reserved} loading={isLoading} />
+                  <CounterCard title="预留任务" value={counters.reserved} loading={isLoading} />
                 </Grid.Col>
                 <Grid.Col span={8}>
-                  <CounterCard title="Waiting Tasks" value={counters.waiting} loading={isLoading} />
+                  <CounterCard title="等待任务" value={counters.waiting} loading={isLoading} />
                 </Grid.Col>
               </Grid.Row>
 
               <Tabs defaultActiveKey="queues" animated={false}>
-                <Tabs.TabPane key="queues" tab="Queues">
+                <Tabs.TabPane key="queues" tab="队列">
                   <QueuesTable loading={isLoading} items={queues} />
                 </Tabs.TabPane>
-                <Tabs.TabPane key="queries" tab="Queries">
+                <Tabs.TabPane key="queries" tab="指标">
                   <QueriesTable loading={isLoading} items={queries} />
                 </Tabs.TabPane>
-                <Tabs.TabPane key="other" tab="Other Tasks">
+                <Tabs.TabPane key="other" tab="其他任务">
                   <OtherTasksTable loading={isLoading} items={otherTasks} />
                 </Tabs.TabPane>
               </Tabs>
@@ -131,7 +131,7 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/admin/queries/tasks',
-      title: 'Celery Status',
+      title: 'Celery状态',
       key: 'tasks',
     },
   ], {

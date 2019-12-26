@@ -33,9 +33,13 @@ def outdated_queries():
         'object_type': 'outdated_queries',
     })
 
+    updated_at = None
+    if manager_status and manager_status['last_refresh_at']:
+        updated_at = manager_status['last_refresh_at']
+
     response = {
         'queries': QuerySerializer(outdated_queries, with_stats=True, with_last_modified_by=False).serialize(),
-        'updated_at': manager_status['last_refresh_at'],
+        'updated_at': updated_at,
     }
     return json_response(response)
 

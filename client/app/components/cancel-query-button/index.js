@@ -7,7 +7,7 @@ function cancelQueryButton() {
     },
     transclude: true,
     template:
-      '<button class="btn btn-default" ng-disabled="inProgress" ng-click="cancelExecution()"><i class="zmdi zmdi-spinner zmdi-hc-spin" ng-if="inProgress"></i> Cancel</button>',
+      '<button class="btn btn-default" ng-disabled="inProgress" ng-click="cancelExecution()"><i class="zmdi zmdi-spinner zmdi-hc-spin" ng-if="inProgress"></i>取消</button>',
     replace: true,
     controller($scope, $http, currentUser, Events) {
       $scope.inProgress = false;

@@ -37,12 +37,12 @@ export default function ColorPicker({
   const actions = [];
   if (!interactive) {
     actions.push((
-      <Tooltip key="cancel" title="Cancel">
+      <Tooltip key="cancel" title="取消">
         <Icon type="close" onClick={handleCancel} />
       </Tooltip>
     ));
     actions.push((
-      <Tooltip key="apply" title="Apply">
+      <Tooltip key="apply" title="应用">
         <Icon type="check" onClick={handleApply} />
       </Tooltip>
     ));

@@ -261,7 +261,7 @@ class QueryEditor extends React.Component {
             <div className="form-inline d-flex">
               <Tooltip
                 placement="top"
-                title={<span>Add New Parameter (<i>{modKey} + P</i>)</span>}
+                title={<span>添加新参数(<i>{modKey} + P</i>)</span>}
               >
                 <button type="button" className="btn btn-default m-r-5" onClick={this.props.addNewParameter}>
                   &#123;&#123;&nbsp;&#125;&#125;
@@ -298,7 +298,7 @@ class QueryEditor extends React.Component {
                     title="Save"
                   >
                     <span className="fa fa-floppy-o" />
-                    <span className="hidden-xs m-l-5">Save</span>
+                    <span className="hidden-xs m-l-5">保存</span>
                     {this.props.isDirty ? '*' : null}
                   </button>
                 </Tooltip>
@@ -319,7 +319,7 @@ class QueryEditor extends React.Component {
                   data-test="ExecuteButton"
                 >
                   <span className="zmdi zmdi-play" />
-                  <span className="hidden-xs m-l-5">{ (this.state.selectedQueryText == null) ? 'Execute' : 'Execute Selected' }</span>
+                  <span className="hidden-xs m-l-5">{ (this.state.selectedQueryText == null) ? '运行' : '运行已选择的' }</span>
                 </button>
               </Tooltip>
             </div>

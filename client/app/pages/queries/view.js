@@ -247,8 +247,8 @@ function QueryViewCtrl(
     const options = Object.assign(
       {},
       {
-        successMessage: 'Query saved',
-        errorMessage: 'Query could not be saved',
+        successMessage: '指标已保存。',
+        errorMessage: '无法保存指标。',
       },
       customOptions,
     );
@@ -278,7 +278,7 @@ function QueryViewCtrl(
       },
       (error) => {
         if (error.status === 409) {
-          const errorMessage = 'It seems like the query has been modified by another user.';
+          const errorMessage = '该指标已被其他用户修改。';
 
           if ($scope.isQueryOwner) {
             const title = 'Overwrite Query';
@@ -288,8 +288,8 @@ function QueryViewCtrl(
             AlertDialog.open(title, message, confirm).then(overwrite);
           } else {
             notification.error(
-              'Changes not saved',
-              errorMessage + ' Please copy/backup your changes and reload this page.',
+              '更改未保存',
+              errorMessage + '请复制/备份您的更改并重新加载此页面。',
               { duration: null },
             );
           }
@@ -317,10 +317,10 @@ function QueryViewCtrl(
     Events.record('edit_name', 'query', $scope.query.id);
 
     let customOptions;
-    if ($scope.query.is_draft && clientConfig.autoPublishNamedQueries && $scope.query.name !== 'New Query') {
+    if ($scope.query.is_draft && clientConfig.autoPublishNamedQueries && $scope.query.name !== '添加指标') {
       $scope.query.is_draft = false;
       customOptions = {
-        successMessage: 'Query saved and published',
+        successMessage: '指标已保存并发布。',
       };
     }
 
@@ -342,15 +342,15 @@ function QueryViewCtrl(
           $scope.query.schedule = null;
         },
         () => {
-          notification.error('Query could not be archived.');
+          notification.error('指标无法归档。');
         },
       );
     }
 
-    const title = 'Archive Query';
+    const title = '指标归档';
     const message =
-      'Are you sure you want to archive this query?<br/> All alerts and dashboard widgets created with its visualizations will be deleted.';
-    const confirm = { class: 'btn-warning', title: 'Archive' };
+      '您确定要存档此查询吗？<br/>使用其可视化文件创建的所有监控和模型小部件都将被删除。';
+    const confirm = { class: 'btn-warning', title: '归档' };
 
     AlertDialog.open(title, message, confirm).then(archive);
   };
@@ -389,7 +389,7 @@ function QueryViewCtrl(
     $e.preventDefault();
 
     const title = undefined;
-    const message = `Are you sure you want to delete ${vis.name} ?`;
+    const message = `您确定要删除 ${vis.name} ?`;
     const confirm = { class: 'btn-danger', title: 'Delete' };
 
     AlertDialog.open(title, message, confirm).then(() => {
@@ -403,7 +403,7 @@ function QueryViewCtrl(
           $scope.query.visualizations = $scope.query.visualizations.filter(v => vis.id !== v.id);
         },
         () => {
-          notification.error('Error deleting visualization.', 'Maybe it\'s used in a dashboard?');
+          notification.error('删除可视化文件时出错，也许它已在模型中使用？');
         },
       );
     });

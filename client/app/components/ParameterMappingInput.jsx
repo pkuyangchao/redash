@@ -178,7 +178,7 @@ export class ParameterMappingInput extends React.Component {
         >
           Existing dashboard parameter{' '}
           {noExisting ? (
-            <Tooltip title="There are no dashboard parameters corresponding to this data type">
+            <Tooltip title="没有与此数据类型相对应的模型参数">
               <Icon type="question-circle" theme="filled" />
             </Tooltip>
           ) : null }
@@ -306,9 +306,9 @@ class MappingEditor extends React.Component {
 
     if (mapping.type === MappingType.DashboardAddNew) {
       if (isEmpty(mapping.mapTo)) {
-        inputError = 'Keyword must have a value';
+        inputError = '关键字必须有一个值';
       } else if (includes(this.props.existingParamNames, mapping.mapTo)) {
-        inputError = 'A parameter with this name already exists';
+        inputError = '相同名称的参数已存在';
       }
     }
 
@@ -346,8 +346,8 @@ class MappingEditor extends React.Component {
           inputError={inputError}
         />
         <footer>
-          <Button onClick={this.hide}>Cancel</Button>
-          <Button onClick={this.save} disabled={!!inputError} type="primary">OK</Button>
+          <Button onClick={this.hide}>取消</Button>
+          <Button onClick={this.save} disabled={!!inputError} type="primary">确定</Button>
         </footer>
       </div>
     );
@@ -453,7 +453,7 @@ class TitleEditor extends React.Component {
     const { mapping } = this.props;
     if (mapping.type === MappingType.StaticValue) {
       return (
-        <Tooltip placement="right" title="Titles for static values don't appear in widgets">
+        <Tooltip placement="right" title="静态值的标题未出现在小部件中">
           <i className="fa fa-eye-slash" />
         </Tooltip>
       );
@@ -590,7 +590,7 @@ export class ParameterMappingListInput extends React.Component {
           rowKey={(record, idx) => `row${idx}`}
         >
           <Table.Column
-            title="Title"
+            title="名称"
             dataIndex="mapping"
             key="title"
             render={mapping => (
@@ -602,14 +602,14 @@ export class ParameterMappingListInput extends React.Component {
             )}
           />
           <Table.Column
-            title="Keyword"
+            title="关键词"
             dataIndex="mapping"
             key="keyword"
             className="keyword"
             render={mapping => <code>{`{{ ${mapping.name} }}`}</code>}
           />
           <Table.Column
-            title="Default Value"
+            title="默认值"
             dataIndex="mapping"
             key="value"
             render={mapping => (
@@ -617,7 +617,7 @@ export class ParameterMappingListInput extends React.Component {
             )}
           />
           <Table.Column
-            title="Value Source"
+            title="设置值"
             dataIndex="mapping"
             key="source"
             render={(mapping) => {

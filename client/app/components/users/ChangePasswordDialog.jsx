@@ -25,9 +25,9 @@ class ChangePasswordDialog extends React.Component {
   }
 
   fieldError = (name, value) => {
-    if (value.length === 0) return 'This field is required.';
-    if (name !== 'currentPassword' && value.length < 6) return 'This field is too short.';
-    if (name === 'repeatPassword' && value !== this.state.newPassword.value) return 'Passwords don\'t match';
+    if (value.length === 0) return '请填写此项';
+    if (name !== 'currentPassword' && value.length < 6) return '长度太短';
+    if (name === 'repeatPassword' && value !== this.state.newPassword.value) return '密码不匹配';
     return null;
   };
 
@@ -68,10 +68,10 @@ class ChangePasswordDialog extends React.Component {
           this.setState({ updatingPassword: true });
 
           User.save(userData, () => {
-            notification.success('Saved.');
+            notification.success('保存成功。');
             this.props.dialog.close({ success: true });
           }, (error = {}) => {
-            notification.error(error.data && error.data.message || 'Failed saving.');
+            notification.error(error.data && error.data.message || '保存失败。');
             this.setState({ updatingPassword: false });
           });
         } else {
@@ -110,14 +110,14 @@ class ChangePasswordDialog extends React.Component {
         {...dialog.props}
         okButtonProps={{ loading: updatingPassword }}
         onOk={this.updatePassword}
-        title="Change Password"
+        title="修改密码"
       >
         <Form layout="vertical">
           <Form.Item
             {...formItemProps}
             validateStatus={currentPassword.touched && currentPassword.error ? 'error' : null}
             help={currentPassword.touched ? currentPassword.error : null}
-            label="Current Password"
+            label="当前密码"
           >
             <Input.Password {...inputProps} name="currentPassword" data-test="CurrentPassword" autoFocus />
           </Form.Item>
@@ -125,7 +125,7 @@ class ChangePasswordDialog extends React.Component {
             {...formItemProps}
             validateStatus={newPassword.touched && newPassword.error ? 'error' : null}
             help={newPassword.touched ? newPassword.error : null}
-            label="New Password"
+            label="输入新密码"
           >
             <Input.Password {...inputProps} name="newPassword" data-test="NewPassword" />
           </Form.Item>
@@ -133,7 +133,7 @@ class ChangePasswordDialog extends React.Component {
             {...formItemProps}
             validateStatus={repeatPassword.touched && repeatPassword.error ? 'error' : null}
             help={repeatPassword.touched ? repeatPassword.error : null}
-            label="Repeat New Password"
+            label="确认新密码"
           >
             <Input.Password {...inputProps} name="repeatPassword" data-test="RepeatPassword" />
           </Form.Item>

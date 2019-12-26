@@ -75,7 +75,7 @@ export function registerVisualization(config) {
   };
 
   if (registeredVisualizations[config.type]) {
-    throw new Error(`Visualization ${config.type} already registered.`);
+    throw new Error(`可视化 ${config.type} 已经注册。`);
   }
 
   registeredVisualizations[config.type] = config;

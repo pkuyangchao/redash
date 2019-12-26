@@ -11,28 +11,28 @@ import DynamicButton from '@/components/dynamic-parameters/DynamicButton';
 import './DynamicParameters.less';
 
 const DYNAMIC_DATE_OPTIONS = [
-  { name: 'This week',
+  { name: '本周',
     value: 'd_this_week',
     label: () => getDynamicDateRange('d_this_week').value()[0].format('MMM D') + ' - ' +
                  getDynamicDateRange('d_this_week').value()[1].format('MMM D') },
-  { name: 'This month', value: 'd_this_month', label: () => getDynamicDateRange('d_this_month').value()[0].format('MMMM') },
-  { name: 'This year', value: 'd_this_year', label: () => getDynamicDateRange('d_this_year').value()[0].format('YYYY') },
-  { name: 'Last week',
+  { name: '本月', value: 'd_this_month', label: () => getDynamicDateRange('d_this_month').value()[0].format('MMMM') },
+  { name: '本年', value: 'd_this_year', label: () => getDynamicDateRange('d_this_year').value()[0].format('YYYY') },
+  { name: '上周',
     value: 'd_last_week',
     label: () => getDynamicDateRange('d_last_week').value()[0].format('MMM D') + ' - ' +
                  getDynamicDateRange('d_last_week').value()[1].format('MMM D') },
-  { name: 'Last month', value: 'd_last_month', label: () => getDynamicDateRange('d_last_month').value()[0].format('MMMM') },
-  { name: 'Last year', value: 'd_last_year', label: () => getDynamicDateRange('d_last_year').value()[0].format('YYYY') },
-  { name: 'Last 7 days',
+  { name: '上个月', value: 'd_last_month', label: () => getDynamicDateRange('d_last_month').value()[0].format('MMMM') },
+  { name: '去年', value: 'd_last_year', label: () => getDynamicDateRange('d_last_year').value()[0].format('YYYY') },
+  { name: '最近7天',
     value: 'd_last_7_days',
     label: () => getDynamicDateRange('d_last_7_days').value()[0].format('MMM D') + ' - Today' },
 ];
 
 const DYNAMIC_DATETIME_OPTIONS = [
-  { name: 'Today',
+  { name: '今天',
     value: 'd_today',
     label: () => getDynamicDateRange('d_today').value()[0].format('MMM D') },
-  { name: 'Yesterday',
+  { name: '昨天',
     value: 'd_yesterday',
     label: () => getDynamicDateRange('d_yesterday').value()[0].format('MMM D') },
   ...DYNAMIC_DATE_OPTIONS,

@@ -44,7 +44,7 @@ class DynamicForm extends React.Component {
     actions: [],
     feedbackIcons: false,
     hideSubmitButton: false,
-    saveText: 'Save',
+    saveText: '保存',
     onSubmit: () => {},
   };
 

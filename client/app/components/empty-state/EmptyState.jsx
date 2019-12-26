@@ -43,7 +43,6 @@ export function EmptyState({
   title,
   description,
   illustration,
-  helpLink,
   onboardingMode,
   showAlertStep,
   showDashboardStep,
@@ -87,60 +86,53 @@ export function EmptyState({
         />
       </div>
       <div className="empty-state__steps">
-        <h4>Let&apos;s get started</h4>
+        <h4>让我们开始</h4>
         <ol>
           {currentUser.isAdmin && (
             <Step
               show={isAvailable.dataSource}
               completed={isCompleted.dataSource}
               url="data_sources/new"
-              urlText="Connect"
-              text="a Data Source"
+              urlText="添加"
+              text="您的数据连接"
             />
           )}
           {!currentUser.isAdmin && (
             <Step
               show={isAvailable.dataSource}
               completed={isCompleted.dataSource}
-              text="Ask an account admin to connect a data source"
+              text="要求帐户管理员连接数据源"
             />
           )}
           <Step
             show={isAvailable.query}
             completed={isCompleted.query}
             url="queries/new"
-            urlText="Create"
-            text="your first Query"
+            urlText="添加"
+            text="您的一个指标"
           />
           <Step
             show={isAvailable.alert}
             completed={isCompleted.alert}
             url="alerts/new"
-            urlText="Create"
-            text="your first Alert"
+            urlText="添加"
+            text="您的一个监控"
           />
           <Step
             show={isAvailable.dashboard}
             completed={isCompleted.dashboard}
             onClick={() => CreateDashboardDialog.showModal()}
-            urlText="Create"
-            text="your first Dashboard"
+            urlText="添加"
+            text="您的一个模型"
           />
           <Step
             show={isAvailable.inviteUsers}
             completed={isCompleted.inviteUsers}
             url="users/new"
-            urlText="Invite"
-            text="your team members"
+            urlText="邀请"
+            text="您的团队成员"
           />
         </ol>
-        <p>
-          Need more support?{' '}
-          <a href={helpLink} target="_blank" rel="noopener noreferrer">
-            See our Help
-            <i className="fa fa-external-link m-l-5" aria-hidden="true" />
-          </a>
-        </p>
       </div>
     </div>
   );
@@ -151,8 +143,6 @@ EmptyState.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string.isRequired,
   illustration: PropTypes.string.isRequired,
-  helpLink: PropTypes.string.isRequired,
-
   onboardingMode: PropTypes.bool,
   showAlertStep: PropTypes.bool,
   showDashboardStep: PropTypes.bool,

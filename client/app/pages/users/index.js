@@ -5,23 +5,23 @@ export default function init() {
   const listRoutes = routesToAngularRoutes([
     {
       path: '/users',
-      title: 'Users',
+      title: '用户',
       key: 'active',
     },
     {
       path: '/users/new',
-      title: 'Users',
+      title: '用户',
       key: 'active',
       isNewUserPage: true,
     },
     {
       path: '/users/pending',
-      title: 'Pending Invitations',
+      title: '等待邀请',
       key: 'pending',
     },
     {
       path: '/users/disabled',
-      title: 'Disabled Users',
+      title: '禁用用户',
       key: 'disabled',
     },
   ], {
@@ -37,12 +37,12 @@ export default function init() {
   const profileRoutes = routesToAngularRoutes([
     {
       path: '/users/me',
-      title: 'Account',
+      title: '账号设置',
       key: 'users',
     },
     {
       path: '/users/:userId',
-      title: 'Users',
+      title: '用户',
       key: 'users',
     },
   ], {

@@ -31,12 +31,12 @@ class DashboardList extends React.Component {
     {
       key: 'all',
       href: 'dashboards',
-      title: 'All Dashboards',
+      title: '所有模型',
     },
     {
       key: 'favorites',
       href: 'dashboards/favorites',
-      title: 'Favorites',
+      title: '收藏模型',
       icon: () => <Sidebar.MenuIcon icon="fa fa-star" />,
     },
   ];
@@ -54,13 +54,13 @@ class DashboardList extends React.Component {
         />
       </React.Fragment>
     ), {
-      title: 'Name',
+      title: '名称',
       field: 'name',
       width: null,
     }),
     Columns.avatar({ field: 'user', className: 'p-l-0 p-r-0' }, name => `Created by ${name}`),
     Columns.dateTime.sortable({
-      title: 'Created At',
+      title: '添加日期',
       field: 'created_at',
       className: 'text-nowrap',
       width: '1%',
@@ -75,7 +75,7 @@ class DashboardList extends React.Component {
         <Layout className="m-l-15 m-r-15">
           <Layout.Sidebar className="m-b-0">
             <Sidebar.SearchInput
-              placeholder="Search Dashboards..."
+              placeholder="请输入搜索的模型..."
               value={controller.searchTerm}
               onChange={controller.updateSearch}
             />
@@ -145,12 +145,12 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/dashboards',
-      title: 'Dashboards',
+      title: '模型',
       key: 'all',
     },
     {
       path: '/dashboards/favorites',
-      title: 'Favorite Dashboards',
+      title: '收藏模型',
       key: 'favorites',
     },
   ], {

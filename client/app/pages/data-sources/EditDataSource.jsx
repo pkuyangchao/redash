@@ -46,9 +46,9 @@ class EditDataSource extends React.Component {
     const { dataSource } = this.state;
     helper.updateTargetWithValues(dataSource, values);
     dataSource.$save(
-      () => successCallback('Saved.'),
+      () => successCallback('保存成功。'),
       (error) => {
-        const message = get(error, 'data.message', 'Failed saving.');
+        const message = get(error, 'data.message', '保存失败。');
         errorCallback(message);
       },
     );
@@ -59,7 +59,7 @@ class EditDataSource extends React.Component {
 
     const doDelete = () => {
       dataSource.$delete(() => {
-        notification.success('Data source deleted successfully.');
+        notification.success('数据连接已成功删除。');
         navigateTo('/data_sources', true);
       }, () => {
         callback();
@@ -67,9 +67,9 @@ class EditDataSource extends React.Component {
     };
 
     Modal.confirm({
-      title: 'Delete Data Source',
-      content: 'Are you sure you want to delete this data source?',
-      okText: 'Delete',
+      title: '删除数据连接',
+      content: '您确定要删除此数据连接吗？',
+      okText: '删除',
       okType: 'danger',
       onOk: doDelete,
       onCancel: callback,
@@ -82,13 +82,13 @@ class EditDataSource extends React.Component {
     const { dataSource } = this.state;
     DataSource.test({ id: dataSource.id }, (httpResponse) => {
       if (httpResponse.ok) {
-        notification.success('Success');
+        notification.success('连接成功');
       } else {
-        notification.error('Connection Test Failed:', httpResponse.message, { duration: 10 });
+        notification.error('连接失败：', httpResponse.message, { duration: 10 });
       }
       callback();
     }, () => {
-      notification.error('Connection Test Failed:', 'Unknown error occurred while performing connection test. Please try again later.', { duration: 10 });
+      notification.error('连接失败：', '连接测试时发生未知错误，请稍后再试...', { duration: 10 });
       callback();
     });
   };
@@ -101,8 +101,8 @@ class EditDataSource extends React.Component {
       fields,
       type,
       actions: [
-        { name: 'Delete', type: 'danger', callback: this.deleteDataSource },
-        { name: 'Test Connection', pullRight: true, callback: this.testConnection, disableWhenDirty: true },
+        { name: '删除', type: 'danger', callback: this.deleteDataSource },
+        { name: '连接测试', pullRight: true, callback: this.testConnection, disableWhenDirty: true },
       ],
       onSubmit: this.saveDataSource,
       feedbackIcons: true,
@@ -139,7 +139,7 @@ export default function init(ngModule) {
   return {
     '/data_sources/:dataSourceId': {
       template: '<settings-screen><page-edit-data-source on-error="handleError"></page-edit-data-source></settings-screen>',
-      title: 'Data Sources',
+      title: '数据连接',
       controller($scope, $exceptionHandler) {
         'ngInject';
 

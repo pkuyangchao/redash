@@ -7,7 +7,7 @@ export default function ListItemAddon({ isSelected, isStaged, alreadyInGroup }) 
     return <i className="fa fa-remove" />;
   }
   if (alreadyInGroup) {
-    return <Tooltip title="Already in this group"><i className="fa fa-check" /></Tooltip>;
+    return <Tooltip title="已经在这个角色中"><i className="fa fa-check" /></Tooltip>;
   }
   return isSelected ? <i className="fa fa-check" /> : <i className="fa fa-angle-double-right" />;
 }

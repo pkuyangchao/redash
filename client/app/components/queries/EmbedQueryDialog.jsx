@@ -43,18 +43,18 @@ class EmbedQueryDialog extends React.Component {
       <Modal
         {...dialog.props}
         className="embed-query-dialog"
-        title="Embed Query"
+        title="嵌入指标"
         footer={(<Button onClick={dialog.dismiss}>Close</Button>)}
       >
         {query.is_safe ? (
           <React.Fragment>
-            <h5 className="m-t-0">Public URL</h5>
+            <h5 className="m-t-0">公开网址</h5>
             <div className="m-b-30">
               <CodeBlock data-test="EmbedIframe" copyable>
                 {this.embedUrl}
               </CodeBlock>
             </div>
-            <h5 className="m-t-0">IFrame Embed</h5>
+            <h5 className="m-t-0">IFrame嵌入</h5>
             <div>
               <CodeBlock copyable>
                 {`<iframe src="${this.embedUrl}" width="${iframeWidth}" height="${iframeHeight}"></iframe>`}
@@ -95,7 +95,7 @@ class EmbedQueryDialog extends React.Component {
           </React.Fragment>
         ) : (
           <Alert
-            message="Currently it is not possible to embed queries that contain text parameters."
+            message="当前无法嵌入包含文本参数的指标"
             type="error"
             data-test="EmbedErrorAlert"
           />

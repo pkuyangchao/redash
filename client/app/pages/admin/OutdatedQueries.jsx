@@ -47,17 +47,17 @@ class OutdatedQueries extends React.Component {
         />
       </React.Fragment>
     ), {
-      title: 'Name',
+      title: '名称',
       field: 'name',
       width: null,
     }),
     Columns.avatar({ field: 'user', className: 'p-l-0 p-r-0' }, name => `Created by ${name}`),
-    Columns.dateTime.sortable({ title: 'Created At', field: 'created_at' }),
-    Columns.duration.sortable({ title: 'Runtime', field: 'runtime' }),
-    Columns.dateTime.sortable({ title: 'Last Executed At', field: 'retrieved_at', orderByField: 'executed_at' }),
+    Columns.dateTime.sortable({ title: '添加日期', field: 'created_at' }),
+    Columns.duration.sortable({ title: '运行时间', field: 'runtime' }),
+    Columns.dateTime.sortable({ title: '最后运行日期', field: 'retrieved_at', orderByField: 'executed_at' }),
     Columns.custom.sortable(
       (text, item) => <SchedulePhrase schedule={item.schedule} isNew={item.isNew()} />,
-      { title: 'Update Schedule', field: 'schedule' },
+      { title: '更新频率', field: 'schedule' },
     ),
   ];
 
@@ -90,7 +90,7 @@ class OutdatedQueries extends React.Component {
         <Grid.Row className="m-15">
           <Grid.Col span={16}>
             <div>
-              <label htmlFor="auto-update-switch" className="m-0">Auto update</label>
+              <label htmlFor="auto-update-switch" className="m-0">自动刷新</label>
               <Switch
                 id="auto-update-switch"
                 className="m-l-10"
@@ -118,7 +118,7 @@ class OutdatedQueries extends React.Component {
         {!controller.isLoaded && <LoadingState />}
         {controller.isLoaded && controller.isEmpty && (
           <div className="text-center p-15">
-            There are no outdated queries.
+            没有超时的指标。
           </div>
         )}
         {
@@ -168,7 +168,7 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/admin/queries/outdated',
-      title: 'Outdated Queries',
+      title: '超时指标',
       key: 'outdated_queries',
     },
   ], {

@@ -61,7 +61,7 @@ class ShareDashboardDialog extends React.Component {
         dashboard.public_url = data.public_url;
       })
       .error(() => {
-        notification.error('Failed to turn on sharing for this dashboard');
+        notification.error('无法开启共享此模型。');
       })
       .finally(() => {
         this.setState({ saving: false });
@@ -79,7 +79,7 @@ class ShareDashboardDialog extends React.Component {
         delete dashboard.public_url;
       })
       .error(() => {
-        notification.error('Failed to turn off sharing for this dashboard');
+        notification.error('无法关闭此模型的共享。');
       })
       .finally(() => {
         this.setState({ saving: false });
@@ -107,12 +107,12 @@ class ShareDashboardDialog extends React.Component {
           {!this.props.hasOnlySafeQueries && (
             <Form.Item>
               <Alert
-                message="For your security, sharing is currently not supported for dashboards containing queries with text parameters. Consider changing the text parameters in your query to a different type."
+                message="为了安全起见，当前不支持包含带有文本参数查询的模型共享；考虑将指标中的文本参数更改为其他类型。"
                 type="error"
               />
             </Form.Item>
           )}
-          <Form.Item label="Allow public access" {...this.formItemProps}>
+          <Form.Item label="允许公众访问" {...this.formItemProps}>
             <Switch
               checked={dashboard.publicAccessEnabled}
               onChange={this.onChange}

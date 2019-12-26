@@ -68,13 +68,14 @@ class TextboxDialog extends React.Component {
     return (
       <Modal
         {...dialog.props}
-        title={isNew ? 'Add Textbox' : 'Edit Textbox'}
+        title={isNew ? '添加文本框' : '编辑文本框'}
         onOk={() => this.saveWidget()}
         okButtonProps={{
           loading: this.state.saveInProgress,
           disabled: !this.state.text,
         }}
-        okText={isNew ? 'Add to Dashboard' : 'Save'}
+        okText={isNew ? '添加到模型' : '保存'}
+        cancelText="取消"
         width={500}
         wrapProps={{ 'data-test': 'TextboxDialog' }}
       >
@@ -85,22 +86,22 @@ class TextboxDialog extends React.Component {
             value={this.state.text}
             onChange={this.onTextChanged}
             autoFocus
-            placeholder="This is where you write some text"
+            placeholder="在这里写一些文字"
           />
           <small>
-            Supports basic{' '}
+            支持基于{' '}
             <a
               target="_blank"
               rel="noopener noreferrer"
               href="https://www.markdownguide.org/cheat-sheet/#basic-syntax"
             >
-              <Tooltip title="Markdown guide opens in new window">Markdown</Tooltip>
-            </a>.
+              <Tooltip title="在新窗口中打开Markdown指南">Markdown</Tooltip>
+            </a>标记语言。
           </small>
           {this.state.text && (
             <React.Fragment>
               <Divider dashed />
-              <strong className="preview-title">Preview:</strong>
+              <strong className="preview-title">预览：</strong>
               <HtmlContent className="preview markdown">{this.state.preview}</HtmlContent>
             </React.Fragment>
           )}

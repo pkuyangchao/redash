@@ -59,9 +59,9 @@ const PermissionsEditorComponent = {
         loadGrantees();
       }).catch((error) => {
         if (error.status === 403) {
-          notification.error('You cannot add a user to this dashboard.', 'Ask the dashboard owner to grant them permissions.');
+          notification.error('您无法将用户添加到该模型。', '要求模型所有者授权。');
         } else {
-          notification.error('Something went wrong.');
+          notification.error('操作错误');
         }
       });
     };

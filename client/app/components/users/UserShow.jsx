@@ -58,7 +58,7 @@ export default class UserShow extends React.Component {
           <dt>Email:</dt>
           <dd>{email}</dd>
           <dt>Groups:</dt>
-          <dd>{loadingGroups ? 'Loading...' : this.renderUserGroups()}</dd>
+          <dd>{loadingGroups ? '正在载入中，请稍等...' : this.renderUserGroups()}</dd>
         </dl>
       </div>
     );

@@ -36,11 +36,11 @@ function saveVisualization(visualization) {
 
   return Visualization.save(visualization).$promise
     .then((result) => {
-      notification.success('Visualization saved');
+      notification.success('可视化已保存。');
       return result;
     })
     .catch((error) => {
-      notification.error('Visualization could not be saved');
+      notification.error('可视化无法保存。');
       return Promise.reject(error);
     });
 }
@@ -49,10 +49,10 @@ function confirmDialogClose(isDirty) {
   return new Promise((resolve, reject) => {
     if (isDirty) {
       Modal.confirm({
-        title: 'Visualization Editor',
-        content: 'Are you sure you want to close the editor without saving?',
-        okText: 'Yes',
-        cancelText: 'No',
+        title: '可视化编辑器',
+        content: '您确定要关闭编辑器而不保存吗？',
+        okText: '确定',
+        cancelText: '取消',
         onOk: () => resolve(),
         onCancel: () => reject(),
       });
@@ -135,8 +135,9 @@ function EditVisualizationDialog({ dialog, visualization, query, queryResult }) 
     <Modal
       {...dialog.props}
       wrapClassName="ant-modal-fullscreen"
-      title="Visualization Editor"
-      okText="Save"
+      title="可视化编辑器"
+      okText="保存"
+      cancelText="取消"
       okButtonProps={{
         loading: saveInProgress,
         disabled: saveInProgress,

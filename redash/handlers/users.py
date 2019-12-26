@@ -219,10 +219,10 @@ class UserResource(BaseResource):
         params = project(req, ('email', 'name', 'password', 'old_password', 'group_ids'))
 
         if 'password' in params and 'old_password' not in params:
-            abort(403, message="Must provide current password to update password.")
+            abort(403, message="必须提供当前密码才能更新密码。")
 
         if 'old_password' in params and not user.verify_password(params['old_password']):
-            abort(403, message="Incorrect current password.")
+            abort(403, message="当前密码错误。")
 
         if 'password' in params:
             user.hash_password(params.pop('password'))
@@ -230,7 +230,7 @@ class UserResource(BaseResource):
 
         if 'group_ids' in params:
             if not self.current_user.has_permission('admin'):
-                abort(403, message="Must be admin to change groups membership.")
+                abort(403, message="必须是管理员才能更改角色成员身份。")
 
             for group_id in params['group_ids']:
                 try:
@@ -245,7 +245,7 @@ class UserResource(BaseResource):
             _, domain = params['email'].split('@', 1)
 
             if domain.lower() in blacklist or domain.lower() == 'qq.com':
-                abort(400, message='Bad email address.')
+                abort(400, message='电子邮件地址错误。')
 
         email_address_changed = 'email' in params and params['email'] != user.email
         needs_to_verify_email = email_address_changed and settings.email_server_is_configured()
@@ -266,9 +266,9 @@ class UserResource(BaseResource):
                 login_user(user, remember=True)
         except IntegrityError as e:
             if "email" in e.message:
-                message = "Email already taken."
+                message = "电子邮件已被占用。"
             else:
-                message = "Error updating record"
+                message = "更新时出错"
 
             abort(400, message=message)
 
@@ -287,11 +287,11 @@ class UserResource(BaseResource):
         # admin cannot delete self; current user is an admin (`@require_admin`)
         # so just check user id
         if user.id == current_user.id:
-            abort(403, message="You cannot delete your own account. "
-                               "Please ask another admin to do this for you.")
+            abort(403, message="您不能删除自己的帐户。 "
+                               "请要求其他管理员为您执行此操作。")
         elif not user.is_invitation_pending:
-            abort(403, message="You cannot delete activated users. "
-                               "Please disable the user instead.")
+            abort(403, message="您无法删除已激活的用户。 "
+                               "请禁用用户。")
         models.db.session.delete(user)
         models.db.session.commit()
 
@@ -305,8 +305,8 @@ class UserDisableResource(BaseResource):
         # admin cannot disable self; current user is an admin (`@require_admin`)
         # so just check user id
         if user.id == current_user.id:
-            abort(403, message="You cannot disable your own account. "
-                               "Please ask another admin to do this for you.")
+            abort(403, message="您不能禁用自己的帐户。 "
+                               "请要求其他管理员为您执行此操作。")
         user.disable()
         models.db.session.commit()
 

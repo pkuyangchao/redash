@@ -4,8 +4,7 @@
       <button
         type="button"
         class="navbar-toggle"
-        ng-click="isNavOpen = !isNavOpen"
-      >
+        ng-click="isNavOpen = !isNavOpen">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -25,7 +24,7 @@
           ng-show="$ctrl.showDashboardsMenu"
           uib-dropdown
         >
-          <a class="btn" href="dashboards">Dashboards</a>
+          <a class="btn" href="dashboards">模型</a>
           <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
             <span class="caret caret--nav"></span>
           </a>
@@ -36,7 +35,7 @@
                   <span class="btn-favourite">
                     <i class="fa fa-star" aria-hidden="true"></i>
                   </span>
-                  Favorite Dashboards will appear here
+                  收藏模板
                 </em>
               </a>
             </li>
@@ -52,7 +51,7 @@
           ng-show="$ctrl.showQueriesMenu"
           uib-dropdown
         >
-          <a class="btn" href="queries">Queries</a>
+          <a class="btn" href="queries">指标</a>
           <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
             <span class="caret caret--nav"></span>
           </a>
@@ -63,7 +62,7 @@
                   <span class="btn-favourite">
                     <i class="fa fa-star" aria-hidden="true"></i>
                   </span>
-                  Favorite Queries will appear here
+                  收藏指标
                 </em>
               </a>
             </li>
@@ -75,7 +74,7 @@
           </ul>
         </li>
         <li ng-if="$ctrl.showAlertsLink">
-          <a href="alerts">Alerts</a>
+          <a href="alerts">监控</a>
         </li>
       </ul>
 
@@ -93,7 +92,7 @@
           uib-dropdown-toggle
           ng-disabled="disabled"
         >
-          Create <span class="caret caret--nav"></span>
+          添加<span class="caret caret--nav"></span>
         </button>
         <ul
           class="dropdown-menu"
@@ -102,29 +101,20 @@
           aria-labelledby="create-button"
         >
           <li role="menuitem" ng-show="$ctrl.showNewQueryMenu">
-            <a href="queries/new">Query</a>
+            <a href="queries/new">指标</a>
           </li>
           <li role="menuitem">
-            <a
-              ng-show="$ctrl.currentUser.hasPermission('create_dashboard')"
-              ng-click="$ctrl.newDashboard()"
-              >Dashboard</a
-            >
+            <a ng-show="$ctrl.currentUser.hasPermission('create_dashboard')"
+              ng-click="$ctrl.newDashboard()">模型</a>
           </li>
-          <li role="menuitem"><a href="alerts/new">Alert</a></li>
+          <li role="menuitem"><a href="alerts/new">监控</a></li>
         </ul>
       </div>
 
       <!-- Profile -->
       <ul class="nav navbar-nav navbar-right">
-        <li>
-          <help-trigger
-            type="'HOME'"
-            class-name="'navbar-link-ANGULAR_REMOVE_ME'"
-          ></help-trigger>
-        </li>
         <li ng-show="$ctrl.currentUser.isAdmin">
-          <a href="data_sources" title="Settings"
+          <a href="data_sources" title="系统管理"
             ><i class="fa fa-sliders" aria-hidden="true"></i
           ></a>
         </li>
@@ -150,7 +140,7 @@
           ></a>
           <ul class="dropdown-menu dropdown-menu--profile">
             <li>
-              <a ng-href="users/me">Edit Profile</a>
+              <a ng-href="users/me">账号设置</a>
             </li>
             <li
               class="divider"
@@ -158,19 +148,19 @@
             ></li>
 
             <li ng-show="$ctrl.currentUser.isAdmin">
-              <a href="data_sources" title="Data Sources">Data Sources</a>
+              <a href="data_sources" title="Data Sources">数据连接</a>
             </li>
             <li ng-show="$ctrl.showSettingsMenu">
-              <a href="groups" title="Settings">Groups</a>
+              <a href="groups" title="Settings">权限管理</a>
             </li>
             <li ng-show="$ctrl.showSettingsMenu">
-              <a href="users" title="Settings">Users</a>
+              <a href="users" title="Settings">用户管理</a>
             </li>
             <li>
-              <a ng-href="query_snippets">Query Snippets</a>
+              <a ng-href="query_snippets">指标便签</a>
             </li>
             <li ng-show="$ctrl.showSettingsMenu">
-              <a href="destinations" title="Settings">Alert Destinations</a>
+              <a href="destinations" title="Settings">智能监控</a>
             </li>
 
             <li
@@ -179,18 +169,18 @@
             ></li>
 
             <li ng-if="$ctrl.currentUser.hasPermission('super_admin')">
-              <a href="admin/status">System Status</a>
+              <a href="admin/status">智能运维</a>
             </li>
 
             <li class="divider"></li>
 
             <li>
-              <a ng-click="$ctrl.logout()">Log out</a>
+              <a ng-click="$ctrl.logout()">退出</a>
             </li>
 
             <li class="divider"></li>
             <li class="dropdown-menu__version">
-              Version: {{ $ctrl.backendVersion }}
+              版本：{{ $ctrl.backendVersion }}
               <span ng-if="$ctrl.frontendVersion !== $ctrl.backendVersion">
                 ({{ $ctrl.frontendVersion.substring(0, 8) }})
               </span>
@@ -218,7 +208,7 @@
             type="text"
             ng-model="$ctrl.searchTerm"
             class="form-control navbar__search__input"
-            placeholder="Search queries..."
+            placeholder="请输入搜索的指标..."
             data-test="AppHeaderSearch"
           />
           <span class="input-group-btn">

@@ -28,18 +28,18 @@ export default function DetailsPageSidebar({
       />
       {canAddMembers && (
         <Button className="w-100 m-t-5" type="primary" onClick={onAddMembersClick}>
-          <i className="fa fa-plus m-r-5" />Add Members
+          <i className="fa fa-plus m-r-5" />添加角色成员
         </Button>
       )}
       {canAddDataSources && (
         <Button className="w-100 m-t-5" type="primary" onClick={onAddDataSourcesClick}>
-          <i className="fa fa-plus m-r-5" />Add Data Sources
+          <i className="fa fa-plus m-r-5" />添加数据连接
         </Button>
       )}
       {canRemove && (
         <React.Fragment>
           <Divider dashed className="m-t-10 m-b-10" />
-          <DeleteGroupButton className="w-100" group={group} onClick={onGroupDeleted}>Delete Group</DeleteGroupButton>
+          <DeleteGroupButton className="w-100" group={group} onClick={onGroupDeleted}>删除角色</DeleteGroupButton>
         </React.Fragment>
       )}
     </React.Fragment>

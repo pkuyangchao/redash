@@ -16,7 +16,6 @@ import { clientConfig } from '@/services/auth';
 import settingsMenu from '@/services/settingsMenu';
 import recordEvent from '@/services/recordEvent';
 import OrgSettings from '@/services/organizationSettings';
-import { HelpTrigger } from '@/components/HelpTrigger';
 import DynamicComponent from '@/components/DynamicComponent';
 
 const Option = Select.Option;
@@ -99,7 +98,7 @@ class OrganizationSettings extends React.Component {
             checked={formValues.auth_saml_enabled}
             onChange={e => this.handleChange('auth_saml_enabled', e.target.checked)}
           >
-            SAML Enabled
+            启用SAML
           </Checkbox>
         </Form.Item>
         {formValues.auth_saml_enabled && (
@@ -132,9 +131,9 @@ class OrganizationSettings extends React.Component {
     const { formValues } = this.state;
     return (
       <React.Fragment>
-        <h3 className="m-t-0">General</h3>
+        <h3 className="m-t-0">常规</h3>
         <hr />
-        <Form.Item label="Date Format">
+        <Form.Item label="日期格式">
           <Select
             value={formValues.date_format}
             onChange={value => this.handleChange('date_format', value)}
@@ -145,7 +144,7 @@ class OrganizationSettings extends React.Component {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label="Time Format">
+        <Form.Item label="时间格式">
           <Select
             value={formValues.time_format}
             onChange={value => this.handleChange('time_format', value)}
@@ -156,13 +155,13 @@ class OrganizationSettings extends React.Component {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label="Feature Flags">
+        <Form.Item label="策略设置">
           <Checkbox
             name="feature_show_permissions_control"
             checked={formValues.feature_show_permissions_control}
             onChange={e => this.handleChange('feature_show_permissions_control', e.target.checked)}
           >
-            Enable experimental multiple owners support
+            启用多用户支持。
           </Checkbox>
         </Form.Item>
         <Form.Item>
@@ -170,7 +169,7 @@ class OrganizationSettings extends React.Component {
             name="send_email_on_failed_scheduled_queries"
             checked={formValues.send_email_on_failed_scheduled_queries}
             onChange={e => this.handleChange('send_email_on_failed_scheduled_queries', e.target.checked)}
-          >Email query owners when scheduled queries fail
+          >启用邮件通知，当指标运行失败时，邮件通知指标所有者。
           </Checkbox>
         </Form.Item>
         <Form.Item>
@@ -179,17 +178,17 @@ class OrganizationSettings extends React.Component {
             checked={formValues.multi_byte_search_enabled}
             onChange={e => this.handleChange('multi_byte_search_enabled', e.target.checked)}
           >
-          Enable multi-byte (Chinese, Japanese, and Korean) search for query names and descriptions (slower)
+          启用多字节（中文，日文和韩文）搜索，使用指标名称和描述（运行较慢）
           </Checkbox>
         </Form.Item>
         <DynamicComponent name="BeaconConsentSetting">
-          <Form.Item label={<>Anonymous Usage Data Sharing <HelpTrigger type="USAGE_DATA_SHARING" /></>}>
+          <Form.Item label={<>匿名使用情况数据共享</>}>
             <Checkbox
               name="beacon_consent"
               checked={formValues.beacon_consent}
               onChange={e => this.handleChange('beacon_consent', e.target.checked)}
             >
-              Help Redash improve by automatically sending anonymous usage data
+              通过自动发送匿名使用情况数据来帮助DaBOT改进
             </Checkbox>
           </Form.Item>
         </DynamicComponent>
@@ -202,7 +201,7 @@ class OrganizationSettings extends React.Component {
     return (
       <React.Fragment>
         <h3 className="m-t-0">
-          Authentication <HelpTrigger type="AUTHENTICATION_OPTIONS" />
+          验证方式
         </h3>
         <hr />
         {!settings.auth_password_login_enabled && (
@@ -224,7 +223,7 @@ class OrganizationSettings extends React.Component {
                 'Password login can be disabled only if another login method is enabled.' : null}
               placement="right"
             >
-              Password Login Enabled
+              启用密码登录
             </Tooltip>
           </Checkbox>
         </Form.Item>
@@ -244,7 +243,7 @@ class OrganizationSettings extends React.Component {
               {this.renderGeneralSettings()}
               {this.renderAuthSettings()}
               <Button className="w-100" type="primary" htmlType="submit" loading={submitting}>
-                Save
+                保存
               </Button>
             </Form>
           )}
@@ -257,7 +256,7 @@ class OrganizationSettings extends React.Component {
 export default function init(ngModule) {
   settingsMenu.add({
     permission: 'admin',
-    title: 'Settings',
+    title: '安全管理',
     path: 'settings/organization',
     order: 6,
   });
@@ -267,7 +266,7 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/settings/organization',
-      title: 'Organization Settings',
+      title: '安全管理',
       key: 'organization-settings',
     },
   ], {

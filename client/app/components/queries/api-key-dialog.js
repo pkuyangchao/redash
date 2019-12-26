@@ -7,18 +7,18 @@ const ApiKeyDialog = {
     <div class="form-group">
         <pre>{{$ctrl.query.api_key}}</pre>
         <div ng-if="$ctrl.canEdit">
-            <button class="btn btn-default" ng-click="$ctrl.regenerateQueryApiKey()" ng-disabled="$ctrl.disableRegenerateApiKeyButton">Regenerate</button>
+            <button class="btn btn-default" ng-click="$ctrl.regenerateQueryApiKey()" ng-disabled="$ctrl.disableRegenerateApiKeyButton">重新生成</button>
         </div>
     </div>
 
-    <h5>Example API Calls:</h5>
+    <h5>API调用示例:</h5>
 
     <div>
-        Results in CSV format:
+        CSV格式的结果:
 
         <pre>{{$ctrl.csvUrlBase + $ctrl.query.api_key}}</pre>
 
-        Results in JSON format:
+        JSON格式的结果:
 
         <pre>{{$ctrl.jsonUrlBase + $ctrl.query.api_key}}</pre>
     </div>

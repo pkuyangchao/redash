@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node --max-http-header-size=16385 ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "bundle": "bin/bundle-extensions",
-    "clean": "rd /s /q \"client/dist\"",
+    "clean": "if exist \"client/dist\" rd /s /q \"client/dist\"",
     "build": "npm run clean && cross-env NODE_ENV=production webpack --progress --hide-modules --config webpack.config.js",
-    "watch": "webpack --watch --progress --colors -d",
+    "watch": "npm run clean && webpack --watch --progress --colors -d",
     "analyze": "npm run clean && BUNDLE_ANALYZER=on webpack",
     "analyze:build": "npm run clean && NODE_ENV=production BUNDLE_ANALYZER=on webpack",
     "lint": "npm run lint:base  -- --ext .js --ext .jsx ./client",

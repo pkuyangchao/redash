@@ -10,17 +10,17 @@ from redash.worker import celery
 
 def get_redis_status():
     info = redis_connection.info()
-    return {'redis_used_memory': info['used_memory'], 'redis_used_memory_human': info['used_memory_human']}
+    return {'Redis内存大小': info['used_memory'], 'Redis使用内存大小': info['used_memory_human']}
 
 
 def get_object_counts():
     status = {}
-    status['queries_count'] = Query.query.count()
+    status['指标数'] = Query.query.count()
     if settings.FEATURE_SHOW_QUERY_RESULTS_COUNT:
-        status['query_results_count'] = QueryResult.query.count()
-        status['unused_query_results_count'] = QueryResult.unused().count()
-    status['dashboards_count'] = Dashboard.query.count()
-    status['widgets_count'] = Widget.query.count()
+        status['指标结果集数'] = QueryResult.query.count()
+        status['未使用指标结果集数'] = QueryResult.unused().count()
+    status['模型数'] = Dashboard.query.count()
+    status['小部件数'] = Widget.query.count()
     return status
 
 
@@ -46,8 +46,8 @@ def get_queues_status():
 def get_db_sizes():
     database_metrics = []
     queries = [
-        ['Query Results Size', "select pg_total_relation_size('query_results') as size from (select 1) as a"],
-        ['Redash DB Size', "select pg_database_size('postgres') as size"]
+        ['查询结果大小', "select pg_total_relation_size('query_results') as size from (select 1) as a"],
+        ['数据库大小', "select pg_database_size('postgres') as size"]
     ]
     for query_name, query in queries:
         result = db.session.execute(query).first()
@@ -58,7 +58,7 @@ def get_db_sizes():
 
 def get_status():
     status = {
-        'version': __version__,
+        '版本': __version__,
         'workers': []
     }
     status.update(get_redis_status())

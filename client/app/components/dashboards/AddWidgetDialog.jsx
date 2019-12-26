@@ -84,7 +84,7 @@ class AddWidgetDialog extends React.Component {
         this.props.dialog.close();
       })
       .catch(() => {
-        notification.error('Widget could not be added');
+        notification.error('无法添加小部件');
       })
       .finally(() => {
         this.setState({ saveInProgress: false });
@@ -134,13 +134,14 @@ class AddWidgetDialog extends React.Component {
     return (
       <Modal
         {...dialog.props}
-        title="Add Widget"
+        title="添加小部件"
         onOk={() => this.saveWidget()}
         okButtonProps={{
           loading: this.state.saveInProgress,
           disabled: !this.state.selectedQuery,
         }}
-        okText="Add to Dashboard"
+        okText="添加到模型"
+        cancelText="取消"
         width={700}
       >
         <div data-test="AddWidgetDialog">

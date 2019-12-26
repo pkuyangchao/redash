@@ -59,7 +59,7 @@ class CreateSourceDialog extends React.Component {
     if (!savingSource) {
       this.setState({ savingSource: true, currentStep: StepEnum.DONE });
       this.props.onCreate(selectedType, values).then((data) => {
-        successCallback('Saved.');
+        successCallback('保存成功。');
         this.props.dialog.close({ success: true, data });
       }).catch((error) => {
         this.setState({ savingSource: false, currentStep: StepEnum.CONFIGURE_IT });
@@ -76,7 +76,7 @@ class CreateSourceDialog extends React.Component {
     return (
       <div className="m-t-10">
         <Search
-          placeholder="Search..."
+          placeholder="搜索..."
           onChange={e => this.setState({ searchText: e.target.value })}
           autoFocus
           data-test="SearchSource"
@@ -148,12 +148,12 @@ class CreateSourceDialog extends React.Component {
     return (
       <Modal
         {...dialog.props}
-        title={`Create a New ${sourceType}`}
+        title={`添加${sourceType}`}
         footer={(currentStep === StepEnum.SELECT_TYPE) ? [
-          (<Button key="cancel" onClick={() => dialog.dismiss()}>Cancel</Button>),
-          (<Button key="submit" type="primary" disabled>Create</Button>),
+          (<Button key="cancel" onClick={() => dialog.dismiss()}>取消</Button>),
+          (<Button key="submit" type="primary" disabled>确定</Button>),
         ] : [
-          (<Button key="previous" onClick={this.resetType}>Previous</Button>),
+          (<Button key="previous" onClick={this.resetType}>后退</Button>),
           (
             <Button
               key="submit"
@@ -163,7 +163,7 @@ class CreateSourceDialog extends React.Component {
               loading={savingSource}
               data-test="CreateSourceButton"
             >
-              Create
+              添加
             </Button>
           ),
         ]}
@@ -172,13 +172,13 @@ class CreateSourceDialog extends React.Component {
           <Steps className="hidden-xs m-b-10" size="small" current={currentStep} progressDot>
             {currentStep === StepEnum.CONFIGURE_IT ? (
               <Step
-                title={<a>Type Selection</a>}
+                title={<a>选择</a>}
                 className="clickable"
                 onClick={this.resetType}
               />
-            ) : (<Step title="Type Selection" />)}
-            <Step title="Configuration" />
-            <Step title="Done" />
+            ) : (<Step title="选择" />)}
+            <Step title="配置" />
+            <Step title="完成" />
           </Steps>
           {currentStep === StepEnum.SELECT_TYPE && this.renderTypeSelector()}
           {currentStep !== StepEnum.SELECT_TYPE && this.renderForm()}

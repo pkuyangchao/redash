@@ -7,7 +7,7 @@ import { EmptyState } from '@/components/empty-state/EmptyState';
 export default function QueriesListEmptyState({ page, searchTerm, selectedTags }) {
   if (searchTerm !== '') {
     return (
-      <BigMessage message="Sorry, we couldn't find anything." icon="fa-search" />
+      <BigMessage message="未查询到任何相关数据。" icon="fa-search" />
     );
   }
   if (selectedTags.length > 0) {
@@ -17,10 +17,10 @@ export default function QueriesListEmptyState({ page, searchTerm, selectedTags }
   }
   switch (page) {
     case 'favorites': return (
-      <BigMessage message="Mark queries as Favorite to list them here." icon="fa-star" />
+      <BigMessage message="将指标标记为收藏以在此处列出。" icon="fa-star" />
     );
     case 'archive': return (
-      <BigMessage message="Archived queries will be listed here." icon="fa-archive" />
+      <BigMessage message="归档的查询将在此处列出。" icon="fa-archive" />
     );
     case 'my': return (
       <div className="tiled bg-white p-15">
@@ -33,8 +33,8 @@ export default function QueriesListEmptyState({ page, searchTerm, selectedTags }
       <EmptyState
         icon="fa fa-code"
         illustration="query"
-        description="Getting the data from your datasources."
-        helpLink="https://help.redash.io/category/21-querying"
+        description="组件化分析"
+        helpLink=""
       />
     );
   }

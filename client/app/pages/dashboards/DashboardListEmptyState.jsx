@@ -7,7 +7,7 @@ import { EmptyState } from '@/components/empty-state/EmptyState';
 export default function DashboardListEmptyState({ page, searchTerm, selectedTags }) {
   if (searchTerm !== '') {
     return (
-      <BigMessage message="Sorry, we couldn't find anything." icon="fa-search" />
+      <BigMessage message="未查询到任何相关数据。" icon="fa-search" />
     );
   }
   if (selectedTags.length > 0) {
@@ -17,14 +17,14 @@ export default function DashboardListEmptyState({ page, searchTerm, selectedTags
   }
   switch (page) {
     case 'favorites': return (
-      <BigMessage message="Mark dashboards as Favorite to list them here." icon="fa-star" />
+      <BigMessage message="收藏的模型，将在此处一一列出。" icon="fa-star" />
     );
     default: return (
       <EmptyState
         icon="zmdi zmdi-view-quilt"
-        description="See the big picture"
+        description="自助式探索"
         illustration="dashboard"
-        helpLink="https://help.redash.io/category/22-dashboards"
+        helpLink=""
         showDashboardStep
       />
     );

@@ -42,12 +42,12 @@ class GroupDataSources extends React.Component {
     {
       key: 'users',
       href: `groups/${this.groupId}`,
-      title: 'Members',
+      title: '角色成员',
     },
     {
       key: 'datasources',
       href: `groups/${this.groupId}/data_sources`,
-      title: 'Data Sources',
+      title: '数据连接',
       isAvailable: () => currentUser.isAdmin,
     },
   ];
@@ -107,7 +107,7 @@ class GroupDataSources extends React.Component {
         this.props.controller.update();
       })
       .catch(() => {
-        notification.error('Failed to remove data source from group.');
+        notification.error('无法从角色中删除数据连接。');
       });
   };
 
@@ -120,7 +120,7 @@ class GroupDataSources extends React.Component {
         this.forceUpdate();
       })
       .catch(() => {
-        notification.error('Failed change data source permissions.');
+        notification.error('更改数据连接权限失败。');
       });
   };
 
@@ -128,9 +128,9 @@ class GroupDataSources extends React.Component {
     const allDataSources = DataSource.query().$promise;
     const alreadyAddedDataSources = map(this.props.controller.allItems, ds => ds.id);
     SelectItemsDialog.showModal({
-      dialogTitle: 'Add Data Sources',
-      inputPlaceholder: 'Search data sources...',
-      selectedItemsTitle: 'New Data Sources',
+      dialogTitle: '',
+      inputPlaceholder: '请输入搜索的数据连接...',
+      selectedItemsTitle: '添加数据连接',
       searchItems: (searchTerm) => {
         searchTerm = searchTerm.toLowerCase();
         return allDataSources.then(items => filter(items, ds => ds.name.toLowerCase().includes(searchTerm)));
@@ -184,11 +184,11 @@ class GroupDataSources extends React.Component {
             {controller.isLoaded && controller.isEmpty && (
               <div className="text-center">
                 <p>
-                  There are no data sources in this group yet.
+                  此角色中还没有数据连接。
                 </p>
                 {currentUser.isAdmin && (
                   <Button type="primary" onClick={this.addDataSources}>
-                    <i className="fa fa-plus m-r-5" />Add Data Sources
+                    <i className="fa fa-plus m-r-5" />添加数据连接
                   </Button>
                 )}
               </div>
@@ -242,7 +242,7 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/groups/:groupId/data_sources',
-      title: 'Group Data Sources',
+      title: '角色的数据连接',
       key: 'datasources',
     },
   ], {

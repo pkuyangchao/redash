@@ -45,9 +45,9 @@ class EditDestination extends React.Component {
     const { destination } = this.state;
     helper.updateTargetWithValues(destination, values);
     destination.$save(
-      () => successCallback('Saved.'),
+      () => successCallback('保存成功。'),
       (error) => {
-        const message = get(error, 'data.message', 'Failed saving.');
+        const message = get(error, 'data.message', '保存失败。');
         errorCallback(message);
       },
     );
@@ -66,9 +66,9 @@ class EditDestination extends React.Component {
     };
 
     Modal.confirm({
-      title: 'Delete Alert Destination',
-      content: 'Are you sure you want to delete this alert destination?',
-      okText: 'Delete',
+      title: '删除监控',
+      content: '您确定要删除此监控吗？',
+      okText: '删除',
       okType: 'danger',
       onOk: doDelete,
       onCancel: callback,
@@ -114,7 +114,7 @@ export default function init(ngModule) {
   return {
     '/destinations/:destinationId': {
       template: '<settings-screen><page-edit-destination on-error="handleError"></page-edit-destination></settings-screen>',
-      title: 'Alert Destinations',
+      title: '智能监控',
       controller($scope, $exceptionHandler) {
         'ngInject';
 

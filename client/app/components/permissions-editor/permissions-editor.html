@@ -1,6 +1,6 @@
 <div class="modal-header">
     <button type="button" class="close" aria-label="Close" ng-click="$ctrl.close()"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">Manage Permissions</h4>
+    <h4 class="modal-title">权限管理</h4>
 </div>
 <div class="modal-body">
   <div style="overflow: auto; height: 300px">
@@ -13,18 +13,18 @@
         <div class="d-flex align-items-center">
           <img ng-src="{{ user.profile_image_url }}" class="profile__image" height="24px">&nbsp;
           <span ng-class="{'text-muted': user.is_disabled}">{{user.name}}</span>
-          &nbsp;<small ng-if="user.alreadyGrantee">(already has permission)</small>
+          &nbsp;<small ng-if="user.alreadyGrantee">(已授权)</small>
         </div>
        </ui-select-choices>
     </ui-select>
       <br>
-      <h5>Who has access</h5>
+      <h5>有权访问者</h5>
        <table class="table table-condensed table-hover table--permission">
         <thead>
           <tr>
             <th></th>
-            <th>User</th>
-            <th>Permission</th>
+            <th>用户</th>
+            <th>权限</th>
             <th></th>
           </tr>
         </thead>
@@ -32,14 +32,14 @@
         <tr>
           <td width="32px"><img ng-src="{{ $ctrl.owner.profile_image_url }}" class="profile__image" height="32px"/></td>
           <td class="text-muted"> {{ $ctrl.owner.name}}</td>
-          <td class="mp__permission-type">Owner</td>
+          <td class="mp__permission-type">所有者</td>
           <td></td>
         </tr>
         <tr ng-repeat="grantee in $ctrl.grantees" ng-if="grantee.id != $ctrl.owner.id">
           <td width="32px"><img ng-src="{{ grantee.profile_image_url }}" class="profile__image" height="32px"/></td>
           <td ng-class="{'text-muted': grantee.is_disabled}">{{grantee.name}}</td>
           <td class="mp__permission-type">{{grantee.access_type}}</td>
-          <td><button class="pull-right btn btn-sm btn-danger" ng-click="$ctrl.removeGrantee(grantee)">Remove</button></td>
+          <td><button class="pull-right btn btn-sm btn-danger" ng-click="$ctrl.removeGrantee(grantee)">删除</button></td>
         </tr>
         </tbody>
       </table>

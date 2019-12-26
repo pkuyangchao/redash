@@ -33,7 +33,7 @@ class SelectItemsDialog extends React.Component {
 
   static defaultProps = {
     dialogTitle: 'Add Items',
-    inputPlaceholder: 'Search...',
+    inputPlaceholder: '搜索...',
     selectedItemsTitle: 'Selected items',
     itemKey: item => item.id,
     renderItem: () => '',
@@ -131,7 +131,7 @@ class SelectItemsDialog extends React.Component {
         {...dialog.props}
         width="80%"
         title={dialogTitle}
-        okText="Save"
+        okText="保存"
         okButtonProps={{
           loading: saveInProgress,
           disabled: selected.length === 0,

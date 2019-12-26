@@ -28,14 +28,9 @@ SQLALCHEMY_ECHO = False
 
 # Celery related settings
 CELERY_BROKER = os.environ.get("REDASH_CELERY_BROKER", REDIS_URL)
-CELERY_RESULT_BACKEND = os.environ.get(
-    "REDASH_CELERY_RESULT_BACKEND",
-    os.environ.get("REDASH_CELERY_BACKEND", CELERY_BROKER))
-CELERY_RESULT_EXPIRES = int(os.environ.get(
-    "REDASH_CELERY_RESULT_EXPIRES",
-    os.environ.get("REDASH_CELERY_TASK_RESULT_EXPIRES", 3600 * 4)))
-CELERY_INIT_TIMEOUT = int(os.environ.get(
-    "REDASH_CELERY_INIT_TIMEOUT", 10))
+CELERY_RESULT_BACKEND = os.environ.get("REDASH_CELERY_RESULT_BACKEND", os.environ.get("REDASH_CELERY_BACKEND", CELERY_BROKER))
+CELERY_RESULT_EXPIRES = int(os.environ.get("REDASH_CELERY_RESULT_EXPIRES", os.environ.get("REDASH_CELERY_TASK_RESULT_EXPIRES", 3600 * 4)))
+CELERY_INIT_TIMEOUT = int(os.environ.get("REDASH_CELERY_INIT_TIMEOUT", 10))
 CELERY_BROKER_USE_SSL = CELERY_BROKER.startswith('rediss')
 CELERY_SSL_CONFIG = {
     'ssl_cert_reqs': int(os.environ.get("REDASH_CELERY_BROKER_SSL_CERT_REQS",  ssl.CERT_OPTIONAL)),
@@ -67,46 +62,35 @@ DATASOURCE_SECRET_KEY = os.environ.get('REDASH_SECRET_KEY', SECRET_KEY)
 
 # Whether and how to redirect non-HTTP requests to HTTPS. Disabled by default.
 ENFORCE_HTTPS = parse_boolean(os.environ.get("REDASH_ENFORCE_HTTPS", "false"))
-ENFORCE_HTTPS_PERMANENT = parse_boolean(
-    os.environ.get("REDASH_ENFORCE_HTTPS_PERMANENT", "false"))
+ENFORCE_HTTPS_PERMANENT = parse_boolean(os.environ.get("REDASH_ENFORCE_HTTPS_PERMANENT", "false"))
 # Whether file downloads are enforced or not.
-ENFORCE_FILE_SAVE = parse_boolean(
-    os.environ.get("REDASH_ENFORCE_FILE_SAVE", "true"))
+ENFORCE_FILE_SAVE = parse_boolean(os.environ.get("REDASH_ENFORCE_FILE_SAVE", "true"))
 
 # Whether to use secure cookies by default.
-COOKIES_SECURE = parse_boolean(
-    os.environ.get("REDASH_COOKIES_SECURE", str(ENFORCE_HTTPS)))
+COOKIES_SECURE = parse_boolean(os.environ.get("REDASH_COOKIES_SECURE", str(ENFORCE_HTTPS)))
 # Whether the session cookie is set to secure.
-SESSION_COOKIE_SECURE = parse_boolean(
-    os.environ.get("REDASH_SESSION_COOKIE_SECURE") or str(COOKIES_SECURE))
+SESSION_COOKIE_SECURE = parse_boolean(os.environ.get("REDASH_SESSION_COOKIE_SECURE") or str(COOKIES_SECURE))
 # Whether the session cookie is set HttpOnly.
-SESSION_COOKIE_HTTPONLY = parse_boolean(
-    os.environ.get("REDASH_SESSION_COOKIE_HTTPONLY", "true"))
+SESSION_COOKIE_HTTPONLY = parse_boolean(os.environ.get("REDASH_SESSION_COOKIE_HTTPONLY", "true"))
 # Whether the session cookie is set to secure.
-REMEMBER_COOKIE_SECURE = parse_boolean(
-    os.environ.get("REDASH_REMEMBER_COOKIE_SECURE") or str(COOKIES_SECURE))
+REMEMBER_COOKIE_SECURE = parse_boolean(os.environ.get("REDASH_REMEMBER_COOKIE_SECURE") or str(COOKIES_SECURE))
 # Whether the remember cookie is set HttpOnly.
-REMEMBER_COOKIE_HTTPONLY = parse_boolean(
-    os.environ.get("REDASH_REMEMBER_COOKIE_HTTPONLY", "true"))
+REMEMBER_COOKIE_HTTPONLY = parse_boolean(os.environ.get("REDASH_REMEMBER_COOKIE_HTTPONLY", "true"))
 
 # Doesn't set X-Frame-Options by default since it's highly dependent
 # on the specific deployment.
 # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
 # for more information.
 FRAME_OPTIONS = os.environ.get("REDASH_FRAME_OPTIONS", "deny")
-FRAME_OPTIONS_ALLOW_FROM = os.environ.get(
-    "REDASH_FRAME_OPTIONS_ALLOW_FROM", "")
+FRAME_OPTIONS_ALLOW_FROM = os.environ.get("REDASH_FRAME_OPTIONS_ALLOW_FROM", "")
 
 # Whether and how to send Strict-Transport-Security response headers.
 # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
 # for more information.
-HSTS_ENABLED = parse_boolean(
-    os.environ.get("REDASH_HSTS_ENABLED") or str(ENFORCE_HTTPS))
+HSTS_ENABLED = parse_boolean(os.environ.get("REDASH_HSTS_ENABLED") or str(ENFORCE_HTTPS))
 HSTS_PRELOAD = parse_boolean(os.environ.get("REDASH_HSTS_PRELOAD", "false"))
-HSTS_MAX_AGE = int(
-    os.environ.get("REDASH_HSTS_MAX_AGE", talisman.ONE_YEAR_IN_SECS))
-HSTS_INCLUDE_SUBDOMAINS = parse_boolean(
-    os.environ.get("REDASH_HSTS_INCLUDE_SUBDOMAINS", "false"))
+HSTS_MAX_AGE = int(os.environ.get("REDASH_HSTS_MAX_AGE", talisman.ONE_YEAR_IN_SECS))
+HSTS_INCLUDE_SUBDOMAINS = parse_boolean(os.environ.get("REDASH_HSTS_INCLUDE_SUBDOMAINS", "false"))
 
 # Whether and how to send Content-Security-Policy response headers.
 # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
@@ -119,19 +103,15 @@ CONTENT_SECURITY_POLICY = os.environ.get(
     "REDASH_CONTENT_SECURITY_POLICY",
     "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; font-src 'self' data:; img-src 'self' http: https: data:; object-src 'none'; frame-ancestors 'none'; frame-src redash.io;"
 )
-CONTENT_SECURITY_POLICY_REPORT_URI = os.environ.get(
-    "REDASH_CONTENT_SECURITY_POLICY_REPORT_URI", "")
-CONTENT_SECURITY_POLICY_REPORT_ONLY = parse_boolean(
-    os.environ.get("REDASH_CONTENT_SECURITY_POLICY_REPORT_ONLY", "false"))
-CONTENT_SECURITY_POLICY_NONCE_IN = array_from_string(
-    os.environ.get("REDASH_CONTENT_SECURITY_POLICY_NONCE_IN", ""))
+CONTENT_SECURITY_POLICY_REPORT_URI = os.environ.get("REDASH_CONTENT_SECURITY_POLICY_REPORT_URI", "")
+CONTENT_SECURITY_POLICY_REPORT_ONLY = parse_boolean(os.environ.get("REDASH_CONTENT_SECURITY_POLICY_REPORT_ONLY", "false"))
+CONTENT_SECURITY_POLICY_NONCE_IN = array_from_string(os.environ.get("REDASH_CONTENT_SECURITY_POLICY_NONCE_IN", ""))
 
 # Whether and how to send Referrer-Policy response headers. Defaults to
 # 'strict-origin-when-cross-origin'.
 # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
 # for more information.
-REFERRER_POLICY = os.environ.get(
-    "REDASH_REFERRER_POLICY", "strict-origin-when-cross-origin")
+REFERRER_POLICY = os.environ.get("REDASH_REFERRER_POLICY", "strict-origin-when-cross-origin")
 # Whether and how to send Feature-Policy response headers. Defaults to
 # an empty value.
 # See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy

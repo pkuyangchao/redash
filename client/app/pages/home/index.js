@@ -34,7 +34,7 @@ export default function init(ngModule) {
   return {
     '/': {
       template: '<home-page></home-page>',
-      title: 'Redash',
+      title: '数博数据分析平台',
     },
   };
 }

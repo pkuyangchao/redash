@@ -39,12 +39,12 @@ class QuerySnippetsList extends React.Component {
         </a>
       </div>
     ), {
-      title: 'Trigger',
+      title: '触发器',
       field: 'trigger',
       className: 'text-nowrap',
     }),
     Columns.custom.sortable(text => text, {
-      title: 'Description',
+      title: '描述',
       field: 'description',
       className: 'text-nowrap',
     }),
@@ -53,19 +53,19 @@ class QuerySnippetsList extends React.Component {
         {snippet}
       </code>
     ), {
-      title: 'Snippet',
+      title: '便签',
       field: 'snippet',
     }),
     Columns.avatar({ field: 'user', className: 'p-l-0 p-r-0' }, name => `Created by ${name}`),
     Columns.date.sortable({
-      title: 'Created At',
+      title: '添加日期',
       field: 'created_at',
       className: 'text-nowrap',
       width: '1%',
     }),
     Columns.custom((text, querySnippet) => canEditQuerySnippet(querySnippet) && (
       <Button type="danger" className="w-100" onClick={e => this.deleteQuerySnippet(e, querySnippet)}>
-        Delete
+        删除
       </Button>
     ), {
       width: '1%',
@@ -100,17 +100,17 @@ class QuerySnippetsList extends React.Component {
 
   deleteQuerySnippet = (event, querySnippet) => {
     Modal.confirm({
-      title: 'Delete Query Snippet',
-      content: 'Are you sure you want to delete this query snippet?',
-      okText: 'Yes',
+      title: '删除指标便签',
+      content: '您确定要删除此指标便签吗？',
+      okText: '确定',
       okType: 'danger',
-      cancelText: 'No',
+      cancelText: '取消',
       onOk: () => {
         querySnippet.$delete(() => {
-          notification.success('Query snippet deleted successfully.');
+          notification.success('指标便签已成功删除。');
           this.props.controller.update();
         }, () => {
-          notification.error('Failed deleting query snippet.');
+          notification.error('删除指标便签失败。');
         });
       },
     });
@@ -142,17 +142,17 @@ class QuerySnippetsList extends React.Component {
             disabled={!policy.isCreateQuerySnippetEnabled()}
           >
             <i className="fa fa-plus m-r-5" />
-            New Query Snippet
+            添加指标便签
           </Button>
         </div>
 
         {!controller.isLoaded && <LoadingState className="" />}
         {controller.isLoaded && controller.isEmpty && (
           <div className="text-center">
-          There are no query snippets yet.
+          您尚未添加指标便签
             {policy.isCreateQuerySnippetEnabled() && (
               <div className="m-t-5">
-                <a className="clickable" onClick={() => this.showSnippetDialog()}>Click here</a> to add one.
+                <a className="clickable" onClick={() => this.showSnippetDialog()}>点击此处</a>添加
               </div>
             )}
           </div>
@@ -185,7 +185,7 @@ class QuerySnippetsList extends React.Component {
 export default function init(ngModule) {
   settingsMenu.add({
     permission: 'create_query',
-    title: 'Query Snippets',
+    title: '指标便签',
     path: 'query_snippets',
     order: 5,
   });
@@ -210,12 +210,12 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/query_snippets',
-      title: 'Query Snippets',
+      title: '指标便签',
       key: 'query_snippets',
     },
     {
       path: '/query_snippets/:querySnippetId',
-      title: 'Query Snippets',
+      title: '指标便签',
       key: 'query_snippets',
       isNewOrEditPage: true,
     },

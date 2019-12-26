@@ -34,7 +34,7 @@ export class FavoritesControl extends React.Component {
   render() {
     const { item, onChange } = this.props;
     const icon = item.is_favorite ? 'fa fa-star' : 'fa fa-star-o';
-    const title = item.is_favorite ? 'Remove from favorites' : 'Add to favorites';
+    const title = item.is_favorite ? '从收藏夹删除' : '添加到收藏夹';
     return (
       <a
         title={title}
@@ -51,9 +51,9 @@ export default function init(ngModule) {
   ngModule.component('favoritesControlImpl', react2angular(FavoritesControl));
   ngModule.component('favoritesControl', {
     template: `
-      <favorites-control-impl 
-        ng-if="$ctrl.item" 
-        item="$ctrl.item" 
+      <favorites-control-impl
+        ng-if="$ctrl.item"
+        item="$ctrl.item"
         on-change="$ctrl.onChange"
         force-update="$ctrl.forceUpdateTag"
       ></favorites-control-impl>

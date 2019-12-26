@@ -43,7 +43,7 @@ export class SchedulePhrase extends React.Component {
 
   render() {
     if (this.props.isNew) {
-      return 'Never';
+      return '从不';
     }
 
     const [short, full] = this.content;

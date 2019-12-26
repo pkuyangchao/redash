@@ -31,10 +31,10 @@ class QuerySnippetDialog extends React.Component {
     this.setState({ saving: true });
     onSubmit(querySnippetId ? { id: querySnippetId, ...values } : values).then(() => {
       dialog.close();
-      successCallback('Saved.');
+      successCallback('保存成功。');
     }).catch(() => {
       this.setState({ saving: false });
-      errorCallback('Failed saving snippet.');
+      errorCallback('保存失败。');
     });
   };
 
@@ -44,10 +44,10 @@ class QuerySnippetDialog extends React.Component {
     const isEditing = !!get(querySnippet, 'id');
 
     const formFields = [
-      { name: 'trigger', title: 'Trigger', type: 'text', required: true, autoFocus: !isEditing },
-      { name: 'description', title: 'Description', type: 'text' },
+      { name: 'trigger', title: '触发器', type: 'text', required: true, autoFocus: !isEditing },
+      { name: 'description', title: '描述', type: 'text' },
       { name: 'snippet',
-        title: 'Snippet',
+        title: '便签',
         type: 'ace',
         required: true },
     ].map(field => ({ ...field, readOnly, initialValue: get(querySnippet, field.name, '') }));
@@ -55,9 +55,9 @@ class QuerySnippetDialog extends React.Component {
     return (
       <Modal
         {...dialog.props}
-        title={(isEditing ? querySnippet.trigger : 'Create Query Snippet')}
+        title={(isEditing ? querySnippet.trigger : '添加指标便签')}
         footer={[(
-          <Button key="cancel" onClick={dialog.dismiss}>{readOnly ? 'Close' : 'Cancel'}</Button>
+          <Button key="cancel" onClick={dialog.dismiss}>{readOnly ? '关闭' : '取消'}</Button>
         ), (
           !readOnly && (
             <Button
@@ -68,7 +68,7 @@ class QuerySnippetDialog extends React.Component {
               type="primary"
               form="querySnippetForm"
             >
-              {isEditing ? 'Save' : 'Create'}
+              {isEditing ? '保存' : '确定'}
             </Button>
           )
         )]}

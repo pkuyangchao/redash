@@ -16,10 +16,10 @@ const AddToDashboardForm = {
         .then(dashboard => dashboard.addWidget(this.vis))
         .then(() => {
           this.close();
-          notification.success('Widget added to dashboard.');
+          notification.success('小部件已添加到模型。');
         })
         .catch(() => {
-          notification.error('Widget not added.');
+          notification.error('小部件未参加。');
         })
         .finally(() => {
           this.saveInProgress = false;

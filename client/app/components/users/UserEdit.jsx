@@ -79,9 +79,10 @@ export default class UserEdit extends React.Component {
     };
 
     Modal.confirm({
-      title: 'Regenerate API Key',
-      content: 'Are you sure you want to regenerate?',
-      okText: 'Regenerate',
+      title: '重新生成API Key',
+      content: '您确定要重新生成吗？',
+      okText: '重新生成',
+      cancelText: '取消',
       onOk: doRegenerate,
       maskClosable: true,
       autoFocusButton: null,
@@ -109,10 +110,10 @@ export default class UserEdit extends React.Component {
     };
 
     User.save(data, (user) => {
-      successCallback('Saved.');
+      successCallback('保存成功。');
       this.setState({ user: User.convertUserInfo(user) });
     }, (error = {}) => {
-      errorCallback(error.data && error.data.message || 'Failed saving.');
+      errorCallback(error.data && error.data.message || '保存失败。');
     });
   };
 
@@ -122,28 +123,28 @@ export default class UserEdit extends React.Component {
     const formFields = [
       {
         name: 'name',
-        title: 'Name',
+        title: '姓名',
         type: 'text',
         initialValue: user.name,
       },
       {
         name: 'email',
-        title: 'Email',
+        title: '邮箱',
         type: 'email',
         initialValue: user.email,
       },
       (!user.isDisabled && currentUser.id !== user.id) ? {
         name: 'group_ids',
-        title: 'Groups',
+        title: '角色',
         type: 'select',
         mode: 'multiple',
         options: groups,
         initialValue: groups.filter(group => includes(user.groupIds, group.value)).map(group => group.value),
         loading: loadingGroups,
-        placeholder: loadingGroups ? 'Loading...' : '',
+        placeholder: loadingGroups ? '正在载入中，请稍等...' : '',
       } : {
         name: 'group_ids',
-        title: 'Groups',
+        title: '角色',
         type: 'content',
         content: this.renderUserGroups(),
       },
@@ -161,7 +162,7 @@ export default class UserEdit extends React.Component {
   renderUserGroups() {
     const { user, groups, loadingGroups } = this.state;
 
-    return loadingGroups ? 'Loading...' : (
+    return loadingGroups ? '正在载入中，请稍等...' : (
       <div data-test="Groups">
         {groups.filter(group => includes(user.groupIds, group.value)).map((group => (
           <Tag className="m-b-5 m-r-5" key={group.value}>
@@ -187,7 +188,7 @@ export default class UserEdit extends React.Component {
           loading={regeneratingApiKey}
           data-test="RegenerateApiKey"
         >
-          Regenerate
+          重新生成
         </Button>
       </Form>
     );
@@ -202,8 +203,7 @@ export default class UserEdit extends React.Component {
         description={(
           <Fragment>
             <p>
-              The mail server is not configured, please send the following link
-              to <b>{user.name}</b>:
+              邮件服务器未配置，请发送以下链接至<b>{user.name}</b>:
             </p>
             <InputWithCopy value={absoluteUrl(passwordLink)} readOnly />
           </Fragment>
@@ -223,7 +223,7 @@ export default class UserEdit extends React.Component {
         onClick={this.resendInvitation}
         loading={this.state.resendingInvitation}
       >
-        Resend Invitation
+        重新发送邀请
       </Button>
     );
   }
@@ -238,7 +238,7 @@ export default class UserEdit extends React.Component {
           onClick={this.sendPasswordReset}
           loading={sendingPasswordEmail}
         >
-          Send Password Reset Email
+          发送密码重置邮件
         </Button>
       </Fragment>
     );
@@ -249,11 +249,11 @@ export default class UserEdit extends React.Component {
 
     return user.isDisabled ? (
       <Button className="w-100 m-t-10" type="primary" onClick={this.toggleUser} loading={togglingUser}>
-        Enable User
+        启用用户
       </Button>
     ) : (
       <Button className="w-100 m-t-10" type="danger" onClick={this.toggleUser} loading={togglingUser}>
-        Disable User
+        禁用用户
       </Button>
     );
   }
@@ -276,10 +276,10 @@ export default class UserEdit extends React.Component {
           <Fragment>
             {this.renderApiKey()}
             <hr />
-            <h5>Password</h5>
+            <h5>修改密码</h5>
             {user.id === currentUser.id && (
               <Button className="w-100 m-t-10" onClick={this.changePassword} data-test="ChangePassword">
-                Change Password
+                保存
               </Button>
             )}
             {(currentUser.isAdmin && user.id !== currentUser.id) && (

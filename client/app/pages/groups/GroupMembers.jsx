@@ -39,12 +39,12 @@ class GroupMembers extends React.Component {
     {
       key: 'users',
       href: `groups/${this.groupId}`,
-      title: 'Members',
+      title: '角色成员',
     },
     {
       key: 'datasources',
       href: `groups/${this.groupId}/data_sources`,
-      title: 'Data Sources',
+      title: '数据连接',
       isAvailable: () => currentUser.isAdmin,
     },
   ];
@@ -53,7 +53,7 @@ class GroupMembers extends React.Component {
     Columns.custom((text, user) => (
       <UserPreviewCard user={user} withLink />
     ), {
-      title: 'Name',
+      title: '名称',
       field: 'name',
       width: null,
     }),
@@ -96,8 +96,8 @@ class GroupMembers extends React.Component {
   addMembers = () => {
     const alreadyAddedUsers = map(this.props.controller.allItems, u => u.id);
     SelectItemsDialog.showModal({
-      dialogTitle: 'Add Members',
-      inputPlaceholder: 'Search users...',
+      dialogTitle: '添加角色成员',
+      inputPlaceholder: '请输入搜索的用户...',
       selectedItemsTitle: 'New Members',
       searchItems: searchTerm => User.query({ q: searchTerm }).$promise.then(({ results }) => results),
       renderItem: (item, { isSelected }) => {
@@ -207,7 +207,7 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/groups/:groupId',
-      title: 'Group Members',
+      title: '角色成员',
       key: 'users',
     },
   ], {

@@ -199,7 +199,7 @@ export class HelpTrigger extends React.Component {
 
             {/* loading indicator */}
             {this.state.loading && (
-              <BigMessage icon="fa-spinner fa-2x fa-pulse" message="Loading..." className="help-message" />
+              <BigMessage icon="fa-spinner fa-2x fa-pulse" message="正在载入中，请稍等..." className="help-message" />
             )}
 
             {/* error message */}

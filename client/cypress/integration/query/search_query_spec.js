@@ -3,13 +3,13 @@ describe('Search Query', () => {
     cy.login();
 
     cy.request('POST', 'api/queries', {
-      name: 'Users Count',
+      name: '用户数量',
       data_source_id: 1,
       query: 'SELECT 1',
     });
 
     cy.request('POST', 'api/queries', {
-      name: 'Dashboards Count',
+      name: '模型数量',
       data_source_id: 1,
       query: 'SELECT 1',
     });

@@ -94,7 +94,7 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/admin/status',
-      title: 'System Status',
+      title: '系统状态',
       key: 'system_status',
     },
   ], {

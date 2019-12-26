@@ -68,7 +68,7 @@ function DashboardCtrl(
         }
       })
       .catch(() => {
-        notification.error('Error saving changes.');
+        notification.error('保存更改时出错。');
       })
       .finally(() => {
         this.saveInProgress = false;
@@ -235,9 +235,9 @@ function DashboardCtrl(
       });
     };
 
-    const title = 'Archive Dashboard';
-    const message = `Are you sure you want to archive the "${this.dashboard.name}" dashboard?`;
-    const confirm = { class: 'btn-warning', title: 'Archive' };
+    const title = '归档模型';
+    const message = `您确定要归档 "${this.dashboard.name}" 模型`;
+    const confirm = { class: 'btn-warning', title: '归档' };
 
     AlertDialog.open(title, message, confirm).then(archive);
   };
@@ -298,11 +298,11 @@ function DashboardCtrl(
       },
       (error) => {
         if (error.status === 403) {
-          notification.error('Dashboard update failed', 'Permission Denied.');
+          notification.error('模型更新失败。', '权限被拒绝。');
         } else if (error.status === 409) {
           notification.error(
-            'It seems like the dashboard has been modified by another user. ',
-            'Please copy/backup your changes and reload this page.',
+            '该模型已被其他用户修改。',
+            '请复制/备份您的更改，然后刷新页面。',
             { duration: null },
           );
         }

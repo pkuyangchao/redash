@@ -47,7 +47,7 @@ class UserProfile extends React.Component {
     const UserComponent = canEdit ? UserEdit : UserShow;
     return (
       <React.Fragment>
-        <EmailSettingsWarning featureName="invite emails" />
+        <EmailSettingsWarning featureName="邀请邮件" />
         <div className="row">
           {user ? <UserComponent user={user} /> : <LoadingState className="" />}
         </div>
@@ -58,7 +58,7 @@ class UserProfile extends React.Component {
 
 export default function init(ngModule) {
   settingsMenu.add({
-    title: 'Account',
+    title: '账号设置',
     path: 'users/me',
     order: 7,
   });

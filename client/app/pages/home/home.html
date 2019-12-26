@@ -21,10 +21,10 @@
     <a ng-click="$ctrl.verifyEmail()">Resend email</a>.
   </div>
   <empty-state
-    title="'Welcome to Redash 👋'"
-    description="'Connect to any data source, easily visualize and share your data'"
+    title="'数博数据分析平台 👋'"
+    description="'连接到任何数据源，轻松可视化和共享数据'"
     illustration="'dashboard'"
-    help-link="'https://redash.io/help/user-guide/getting-started'"
+    help-link="''"
     show-dashboard-step="true"
     show-invite-step="true"
     onboarding-mode="true"
@@ -36,13 +36,13 @@
     <div class="t-body tb-padding">
       <div class="row">
         <div class="col-sm-6">
-          <p class="f-500 m-b-20 c-black">Favorite Dashboards</p>
+          <p class="f-500 m-b-20 c-black">收藏模型</p>
 
           <p ng-if="$ctrl.noDashboards">
             <span class="btn-favourite">
               <i class="fa fa-star" aria-hidden="true"></i>
             </span>
-            Favorite <a href="dashboards">Dashboards</a> will appear here
+            收藏的 <a href="dashboards">模型</a>
           </p>
 
           <div class="list-group">
@@ -57,19 +57,19 @@
               </span>
               {{ dashboard.name }}
               <span class="label label-default" ng-if="dashboard.is_draft"
-                >Unpublished</span
+                >未发布</span
               >
             </a>
           </div>
         </div>
 
         <div class="col-sm-6">
-          <p class="f-500 m-b-20 c-black">Favorite Queries</p>
+          <p class="f-500 m-b-20 c-black">收藏指标</p>
           <p ng-if="$ctrl.noQueries">
             <span class="btn-favourite">
               <i class="fa fa-star" aria-hidden="true"></i>
             </span>
-            Favorite <a href="queries">Queries</a> will appear here
+            收藏的 <a href="queries">指标</a>
           </p>
           <div class="list-group">
             <a
@@ -83,7 +83,7 @@
               </span>
               {{ query.name }}
               <span class="label label-default" ng-if="query.is_draft"
-                >Unpublished</span
+                >未发布</span
               >
             </a>
           </div>

@@ -12,7 +12,7 @@ import { toHuman, prettySize } from '@/filters';
 export function General({ info }) {
   info = toPairs(info);
   return (
-    <Card title="General" size="small">
+    <Card title="常规" size="small">
       {(info.length === 0) && (
         <div className="text-muted text-center">No data</div>
       )}
@@ -34,7 +34,7 @@ export function General({ info }) {
 
 export function DatabaseMetrics({ info }) {
   return (
-    <Card title="Redash Database" size="small">
+    <Card title="数博数据库" size="small">
       {(info.length === 0) && (
         <div className="text-muted text-center">No data</div>
       )}
@@ -57,7 +57,7 @@ export function DatabaseMetrics({ info }) {
 export function Queues({ info }) {
   info = toPairs(info);
   return (
-    <Card title="Queues" size="small">
+    <Card title="队列" size="small">
       {(info.length === 0) && (
         <div className="text-muted text-center">No data</div>
       )}
@@ -80,20 +80,20 @@ export function Queues({ info }) {
 export function Manager({ info }) {
   const items = info ? [(
     <List.Item extra={<span className="badge"><TimeAgo date={info.lastRefreshAt} placeholder="n/a" /></span>}>
-      Last Refresh
+      最后刷新
     </List.Item>
   ), (
     <List.Item extra={<span className="badge"><TimeAgo date={info.startedAt} placeholder="n/a" /></span>}>
-      Started
+      已开始
     </List.Item>
   ), (
     <List.Item extra={<span className="badge">{info.outdatedQueriesCount}</span>}>
-      Outdated Queries Count
+      超时指标数
     </List.Item>
   )] : [];
 
   return (
-    <Card title="Manager" size="small">
+    <Card title="内存" size="small">
       {!info && (
         <div className="text-muted text-center">No data</div>
       )}

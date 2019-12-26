@@ -51,7 +51,7 @@ class DataSourcesList extends React.Component {
       return dataSource;
     }).catch((error) => {
       if (!(error instanceof Error)) {
-        error = new Error(get(error, 'data.message', 'Failed saving.'));
+        error = new Error(get(error, 'data.message', '保存失败。'));
       }
       return Promise.reject(error);
     });
@@ -61,7 +61,7 @@ class DataSourcesList extends React.Component {
     recordEvent('view', 'page', 'data_sources/new');
     CreateSourceDialog.showModal({
       types: this.state.dataSourceTypes,
-      sourceType: 'Data Source',
+      sourceType: '数据连接',
       imageFolder: IMG_ROOT,
       helpTriggerPrefix: 'DS_',
       onCreate: this.createDataSource,
@@ -82,10 +82,10 @@ class DataSourcesList extends React.Component {
 
     return isEmpty(dataSources) ? (
       <div className="text-center">
-        There are no data sources yet.
+        您尚未添加数据连接
         {policy.isCreateDataSourceEnabled() && (
           <div className="m-t-5">
-            <a className="clickable" onClick={this.showCreateSourceDialog}>Click here</a> to add one.
+            <a className="clickable" onClick={this.showCreateSourceDialog}>点击此处</a>添加
           </div>
         )}
       </div>
@@ -104,7 +104,7 @@ class DataSourcesList extends React.Component {
         <div className="m-b-15">
           <Button {...newDataSourceProps}>
             <i className="fa fa-plus m-r-5" />
-            New Data Source
+            添加数据连接
           </Button>
           <DynamicComponent name="DataSourcesListExtra" />
         </div>
@@ -117,7 +117,7 @@ class DataSourcesList extends React.Component {
 export default function init(ngModule) {
   settingsMenu.add({
     permission: 'admin',
-    title: 'Data Sources',
+    title: '数据连接',
     path: 'data_sources',
     order: 1,
   });
@@ -127,12 +127,12 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/data_sources',
-      title: 'Data Sources',
+      title: '数据连接',
       key: 'data_sources',
     },
     {
       path: '/data_sources/new',
-      title: 'Data Sources',
+      title: '数据连接',
       key: 'data_sources',
       isNewDataSourcePage: true,
     },

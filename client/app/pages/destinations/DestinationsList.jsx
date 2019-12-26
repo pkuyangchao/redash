@@ -49,7 +49,7 @@ class DestinationsList extends React.Component {
       return destination;
     }).catch((error) => {
       if (!(error instanceof Error)) {
-        error = new Error(get(error, 'data.message', 'Failed saving.'));
+        error = new Error(get(error, 'data.message', '保存失败。'));
       }
       return Promise.reject(error);
     });
@@ -58,7 +58,7 @@ class DestinationsList extends React.Component {
   showCreateSourceDialog = () => {
     CreateSourceDialog.showModal({
       types: this.state.destinationTypes,
-      sourceType: 'Alert Destination',
+      sourceType: '监控',
       imageFolder: IMG_ROOT,
       onCreate: this.createDestination,
     }).result.then((result = {}) => {
@@ -78,10 +78,10 @@ class DestinationsList extends React.Component {
 
     return isEmpty(destinations) ? (
       <div className="text-center">
-        There are no alert destinations yet.
+        您尚未添加监控
         {policy.isCreateDestinationEnabled() && (
           <div className="m-t-5">
-            <a className="clickable" onClick={this.showCreateSourceDialog}>Click here</a> to add one.
+            <a className="clickable" onClick={this.showCreateSourceDialog}>点击此处</a> 添加
           </div>
         )}
       </div>
@@ -100,7 +100,7 @@ class DestinationsList extends React.Component {
         <div className="m-b-15">
           <Button {...newDestinationProps}>
             <i className="fa fa-plus m-r-5" />
-            New Alert Destination
+            添加监控
           </Button>
         </div>
         {this.state.loading ? <LoadingState className="" /> : this.renderDestinations()}
@@ -112,7 +112,7 @@ class DestinationsList extends React.Component {
 export default function init(ngModule) {
   settingsMenu.add({
     permission: 'admin',
-    title: 'Alert Destinations',
+    title: '智能监控',
     path: 'destinations',
     order: 4,
   });
@@ -122,12 +122,12 @@ export default function init(ngModule) {
   return routesToAngularRoutes([
     {
       path: '/destinations',
-      title: 'Alert Destinations',
+      title: '智能监控',
       key: 'destinations',
     },
     {
       path: '/destinations/new',
-      title: 'Alert Destinations',
+      title: '智能监控',
       key: 'destinations',
       isNewDestinationPage: true,
     },

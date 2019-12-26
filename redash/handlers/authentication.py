@@ -166,9 +166,9 @@ def login(org_slug=None):
                 login_user(user, remember=remember)
                 return redirect(next_path)
             else:
-                flash("Wrong email or password.")
+                flash("用户名或密码有误，请重新输入")
         except NoResultFound:
-            flash("Wrong email or password.")
+            flash("用户名或密码有误，请重新输入")
 
     google_auth_url = get_google_auth_url(next_path)
 

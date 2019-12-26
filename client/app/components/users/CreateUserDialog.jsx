@@ -38,15 +38,16 @@ class CreateUserDialog extends React.Component {
   render() {
     const { savingUser, errorMessage } = this.state;
     const formFields = [
-      { name: 'name', title: 'Name', type: 'text', autoFocus: true },
-      { name: 'email', title: 'Email', type: 'email' },
+      { name: 'name', title: '姓名', type: 'text', autoFocus: true },
+      { name: 'email', title: '邮箱', type: 'email' },
     ].map(field => ({ required: true, props: { onPressEnter: this.createUser }, ...field }));
 
     return (
       <Modal
         {...this.props.dialog.props}
-        title="Create a New User"
-        okText="Create"
+        title="添加用户"
+        okText="确定"
+        cancelText="取消"
         okButtonProps={{ loading: savingUser }}
         onOk={() => this.createUser()}
       >

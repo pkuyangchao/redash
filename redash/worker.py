@@ -82,7 +82,8 @@ class ContextTask(TaskBase):
     abstract = True
 
     def __call__(self, *args, **kwargs):
-        with current_app.app_context():
+        app = create_app()
+        with app.app_context():
             return TaskBase.__call__(self, *args, **kwargs)
 
 

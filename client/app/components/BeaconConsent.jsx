@@ -59,15 +59,15 @@ export function BeaconConsent() {
           <Text>All data is aggregated and will never include any sensitive or private data.</Text>
           <div className="m-t-5">
             <Button type="primary" className="m-r-5" onClick={() => confirmConsent(true)}>
-              Yes
+              确定
             </Button>
             <Button type="default" onClick={() => confirmConsent(false)}>
-              No
+              取消
             </Button>
           </div>
           <div className="m-t-15">
             <Text type="secondary">
-              You can change this setting anytime from the <a href="settings/organization">Organization Settings</a> page.
+              您可以随时从<a href="settings/organization">安全管理</a> 页面修改配置。
             </Text>
           </div>
         </Card>

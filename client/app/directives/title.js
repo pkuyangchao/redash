@@ -2,7 +2,7 @@ import { logger } from './utils';
 
 function TitleService($rootScope) {
   const Title = {
-    title: 'Redash',
+    title: '数博数据分析平台',
     set(newTitle) {
       this.title = newTitle;
       $rootScope.$broadcast('$titleChange');

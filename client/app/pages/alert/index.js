@@ -72,19 +72,19 @@ function AlertCtrl($scope, $routeParams, $location, $sce, $sanitize, currentUser
     }
     this.alert.$save(
       (alert) => {
-        notification.success('Saved.');
+        notification.success('保存成功。');
         if (this.alertId === 'new') {
           $location.path(`/alerts/${alert.id}`).replace();
         }
       },
       () => {
-        notification.error('Failed saving alert.');
+        notification.error('保存失败。');
       },
     );
   };
 
   this.preview = () => {
-    const notifyError = () => notification.error('Unable to render description. please confirm your template.');
+    const notifyError = () => notification.error('无法渲染描述，请确认您的模板。');
     try {
       const result = this.alertTemplate.render(this.alert, this.queryResult.query_result.data);
       this.alert.preview = $sce.trustAsHtml(result.escaped);
@@ -102,17 +102,17 @@ function AlertCtrl($scope, $routeParams, $location, $sce, $sanitize, currentUser
   this.delete = () => {
     const doDelete = () => {
       this.alert.$delete(() => {
-        notification.success('Alert destination deleted successfully.');
+        notification.success('监控已成功删除。');
         navigateTo('/alerts', true);
       }, () => {
-        notification.error('Failed deleting alert.');
+        notification.error('删除失败。');
       });
     };
 
     Modal.confirm({
-      title: 'Delete Alert',
-      content: 'Are you sure you want to delete this alert?',
-      okText: 'Delete',
+      title: '删除监控',
+      content: '您确定要删除此监控吗？',
+      okText: '删除',
       okType: 'danger',
       onOk: doDelete,
       maskClosable: true,
@@ -130,7 +130,7 @@ export default function init(ngModule) {
   return {
     '/alerts/:alertId': {
       template: '<alert-page></alert-page>',
-      title: 'Alerts',
+      title: '监控',
     },
   };
 }
