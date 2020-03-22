@@ -6,5 +6,6 @@ module.exports = {
   },
   rules: {
     "jest/no-focused-tests": "off",
+    "linebreak-style": [0 ,"error", "windows"],
   },
 };

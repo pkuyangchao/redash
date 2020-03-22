@@ -1,8 +1,10 @@
-import { includes, map } from 'lodash';
+import { filter, map, includes } from 'lodash';
 import React from 'react';
 import { react2angular } from 'react2angular';
 import Button from 'antd/lib/button';
-
+import Dropdown from 'antd/lib/dropdown';
+import Menu from 'antd/lib/menu';
+import Icon from 'antd/lib/icon';
 import { Paginator } from '@/components/Paginator';
 
 import { wrap as liveItemsList, ControllerType } from '@/components/items-list/ItemsList';
@@ -12,7 +14,7 @@ import { StateStorage } from '@/components/items-list/classes/StateStorage';
 import LoadingState from '@/components/items-list/components/LoadingState';
 import ItemsTable, { Columns } from '@/components/items-list/components/ItemsTable';
 import SelectItemsDialog from '@/components/SelectItemsDialog';
-import { UserPreviewCard } from '@/components/PreviewCard';
+import { DataSourcePreviewCard } from '@/components/PreviewCard';
 
 import GroupName from '@/components/groups/GroupName';
 import ListItemAddon from '@/components/groups/ListItemAddon';
@@ -22,11 +24,11 @@ import Layout from '@/components/layouts/ContentWithSidebar';
 import notification from '@/services/notification';
 import { currentUser } from '@/services/auth';
 import { Group } from '@/services/group';
-import { User } from '@/services/user';
+import { ManageBoard } from '@/services/manage-board';
 import navigateTo from '@/services/navigateTo';
 import { routesToAngularRoutes } from '@/lib/utils';
 
-class GroupMembers extends React.Component {
+class GroupManageBoards extends React.Component {
   static propTypes = {
     controller: ControllerType.isRequired,
   };
@@ -60,24 +62,37 @@ class GroupMembers extends React.Component {
   ];
 
   listColumns = [
-    Columns.custom((text, user) => (
-      <UserPreviewCard user={user} withLink />
+    Columns.custom((text, datasource) => (
+      <DataSourcePreviewCard dataSource={datasource} withLink />
     ), {
-      title: '名称',
+      title: 'Name',
       field: 'name',
       width: null,
     }),
-    Columns.custom((text, user) => {
-      if (!this.group) {
-        return null;
-      }
+    Columns.custom((text, datasource) => {
+      const menu = (
+        <Menu
+          selectedKeys={[datasource.view_only ? 'viewonly' : 'full']}
+          onClick={item => this.setManageBoardPermissions(datasource, item.key)}
+        >
+          <Menu.Item key="full">Full Access</Menu.Item>
+          <Menu.Item key="viewonly">View Only</Menu.Item>
+        </Menu>
+      );
 
-      // cannot remove self from built-in groups
-      if ((this.group.type === 'builtin') && (currentUser.id === user.id)) {
-        return null;
-      }
-      return <Button className="w-100" type="danger" onClick={event => this.removeGroupMember(event, user)}>Remove</Button>;
+      return (
+        <Dropdown trigger={['click']} overlay={menu}>
+          <Button className="w-100">{datasource.view_only ? 'View Only' : 'Full Access'}<Icon type="down" /></Button>
+        </Dropdown>
+      );
     }, {
+      width: '1%',
+      className: 'p-r-0',
+      isAvailable: () => currentUser.isAdmin,
+    }),
+    Columns.custom((text, datasource) => (
+      <Button className="w-100" type="danger" onClick={() => this.removeGroupManageBoard(datasource)}>Remove</Button>
+    ), {
       width: '1%',
       isAvailable: () => currentUser.isAdmin,
     }),
@@ -94,64 +109,48 @@ class GroupMembers extends React.Component {
       });
   }
 
-  removeGroupMember = (event, user) => Group.removeMember({ id: this.groupId, userId: user.id }).$promise
-    .then(() => {
-      this.props.controller.updatePagination({ page: 1 });
-      this.props.controller.update();
-    })
-    .catch(() => {
-      notification.error('Failed to remove member from group.');
-    });
-
-  addMembers = () => {
-    const alreadyAddedUsers = map(this.props.controller.allItems, u => u.id);
-    SelectItemsDialog.showModal({
-      dialogTitle: '添加角色成员',
-      inputPlaceholder: '请输入搜索的用户...',
-      selectedItemsTitle: 'New Members',
-      searchItems: searchTerm => User.query({ q: searchTerm }).$promise.then(({ results }) => results),
-      renderItem: (item, { isSelected }) => {
-        const alreadyInGroup = includes(alreadyAddedUsers, item.id);
-        return {
-          content: (
-            <UserPreviewCard user={item}>
-              <ListItemAddon isSelected={isSelected} alreadyInGroup={alreadyInGroup} />
-            </UserPreviewCard>
-          ),
-          isDisabled: alreadyInGroup,
-          className: isSelected || alreadyInGroup ? 'selected' : '',
-        };
-      },
-      renderStagedItem: (item, { isSelected }) => ({
-        content: (
-          <UserPreviewCard user={item}>
-            <ListItemAddon isSelected={isSelected} isStaged />
-          </UserPreviewCard>
-        ),
-      }),
-      save: (items) => {
-        const promises = map(items, u => Group.addMember({ id: this.groupId }, { user_id: u.id }).$promise);
-        return Promise.all(promises);
-      },
-    }).result.finally(() => {
-      this.props.controller.update();
-    });
+  removeGroupManageBoard = (datasource) => {
+    Group.removeManageBoard({ id: this.groupId, manageBoardId: datasource.id }).$promise
+      .then(() => {
+        this.props.controller.updatePagination({ page: 1 });
+        this.props.controller.update();
+      })
+      .catch(() => {
+        notification.error('无法从角色中删除看板权限。');
+      });
   };
 
-  addTarget = () => {
-    const alreadyAddedUsers = map(this.props.controller.allItems, u => u.id);
+  setManageBoardPermissions = (datasource, permission) => {
+    const viewOnly = permission !== 'full';
+
+    Group.updateManageBoard({ id: this.groupId, manageBoardId: datasource.id }, { view_only: viewOnly }).$promise
+      .then(() => {
+        datasource.view_only = viewOnly;
+        this.forceUpdate();
+      })
+      .catch(() => {
+        notification.error('更改看板管理权限失败。');
+      });
+  };
+
+  addManageBoards = () => {
+    const allManageBoards = ManageBoard.query().$promise;
+    const alreadyAddedManageBoards = map(this.props.controller.allItems, ds => ds.id);
     SelectItemsDialog.showModal({
-      dialogTitle: '添加管理指标权限',
-      inputPlaceholder: '请输入搜索的指标...',
-      selectedItemsTitle: 'New Targets',
-      searchItems: searchTerm => User.query({ q: searchTerm }).$promise.then(({ results }) => results),
+      dialogTitle: '',
+      inputPlaceholder: '请输入搜索的看板权限...',
+      selectedItemsTitle: '添加管理看板权限',
+      searchItems: (searchTerm) => {
+        searchTerm = searchTerm.toLowerCase();
+        return allManageBoards.then(items => filter(items, ds => ds.name.toLowerCase().includes(searchTerm)));
+      },
       renderItem: (item, { isSelected }) => {
-        const alreadyInGroup = includes(alreadyAddedUsers, item.id);
+        const alreadyInGroup = includes(alreadyAddedManageBoards, item.id);
         return {
           content: (
-            <UserPreviewCard user={item}>
+            <DataSourcePreviewCard dataSource={item}>
               <ListItemAddon isSelected={isSelected} alreadyInGroup={alreadyInGroup} />
-            </UserPreviewCard>
+            </DataSourcePreviewCard>
           ),
           isDisabled: alreadyInGroup,
           className: isSelected || alreadyInGroup ? 'selected' : '',
@@ -159,13 +158,13 @@ class GroupMembers extends React.Component {
       },
       renderStagedItem: (item, { isSelected }) => ({
         content: (
-          <UserPreviewCard user={item}>
+          <DataSourcePreviewCard dataSource={item}>
             <ListItemAddon isSelected={isSelected} isStaged />
-          </UserPreviewCard>
+          </DataSourcePreviewCard>
         ),
       }),
       save: (items) => {
-        const promises = map(items, u => Group.addMember({ id: this.groupId }, { user_id: u.id }).$promise);
+        const promises = map(items, ds => Group.addManageBoard({ id: this.groupId, data_source_id: ds.id }).$promise);
         return Promise.all(promises);
       },
     }).result.finally(() => {
@@ -184,8 +183,8 @@ class GroupMembers extends React.Component {
               controller={controller}
               group={this.group}
               items={this.sidebarMenu}
-              canAddMembers={currentUser.isAdmin}
-              onAddMembersClick={this.addMembers}
+              canAddManageBoards={currentUser.isAdmin}
+              onAddManageBoardsClick={this.addManageBoards}
               onGroupDeleted={() => navigateTo('/groups', true)}
             />
           </Layout.Sidebar>
@@ -194,11 +193,11 @@ class GroupMembers extends React.Component {
             {controller.isLoaded && controller.isEmpty && (
               <div className="text-center">
                 <p>
-                  There are no members in this group yet.
+                  此角色中还没有可管理的看板。
                 </p>
                 {currentUser.isAdmin && (
-                  <Button type="primary" onClick={this.addMembers}>
-                    <i className="fa fa-plus m-r-5" />Add Members
+                  <Button type="primary" onClick={this.addManageBoards}>
+                    <i className="fa fa-plus m-r-5" />添加管理看板
                   </Button>
                 )}
               </div>
@@ -232,18 +231,18 @@ class GroupMembers extends React.Component {
 }
 
 export default function init(ngModule) {
-  ngModule.component('pageGroupMembers', react2angular(liveItemsList(
-    GroupMembers,
+  ngModule.component('pageGroupManageBoards', react2angular(liveItemsList(
+    GroupManageBoards,
     new ResourceItemsSource({
       isPlainList: true,
       getRequest(unused, { params: { groupId } }) {
         return { id: groupId };
       },
       getResource() {
-        return Group.members.bind(Group);
+        return Group.manageBoards.bind(Group);
       },
       getItemProcessor() {
-        return (item => new User(item));
+        return (item => new ManageBoard(item));
       },
     }),
     new StateStorage({ orderByField: 'name' }),
@@ -251,13 +250,13 @@ export default function init(ngModule) {
 
   return routesToAngularRoutes([
     {
-      path: '/groups/:groupId',
-      title: '角色成员',
-      key: 'users',
+      path: '/groups/:groupId/manage_boards',
+      title: '角色的管理看板权限',
+      key: 'manageboards',
     },
   ], {
     reloadOnSearch: false,
-    template: '<settings-screen><page-group-members on-error="handleError"></page-group-members></settings-screen>',
+    template: '<settings-screen><page-group-manage-boards on-error="handleError"></page-group-manage-boards></settings-screen>',
     controller($scope, $exceptionHandler) {
       'ngInject';
 

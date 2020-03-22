@@ -45,6 +45,16 @@ class GroupDataSources extends React.Component {
       title: '角色成员',
     },
     {
+      key: 'managetargets',
+      href: `groups/${this.groupId}/manage_targets`,
+      title: '指标管理',
+    },
+    {
+      key: 'manageboards',
+      href: `groups/${this.groupId}/manage_boards`,
+      title: '看板管理',
+    },
+    {
       key: 'datasources',
       href: `groups/${this.groupId}/data_sources`,
       title: '数据连接',

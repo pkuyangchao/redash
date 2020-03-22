@@ -13,6 +13,8 @@ export default function DetailsPageSidebar({
   controller, group, items,
   canAddMembers, onAddMembersClick,
   canAddDataSources, onAddDataSourcesClick,
+  canAddManageTargets, onAddManageTargetsClick,
+  canAddManageBoards, onAddManageBoardsClick,
   onGroupDeleted,
 }) {
   const canRemove = group && currentUser.isAdmin && (group.type !== 'builtin');
@@ -36,6 +38,16 @@ export default function DetailsPageSidebar({
           <i className="fa fa-plus m-r-5" />添加数据连接
         </Button>
       )}
+      {canAddManageTargets && (
+        <Button className="w-100 m-t-5" type="primary" onClick={onAddManageTargetsClick}>
+          <i className="fa fa-plus m-r-5" />添加管理指标权限
+        </Button>
+      )}
+      {canAddManageBoards && (
+        <Button className="w-100 m-t-5" type="primary" onClick={onAddManageBoardsClick}>
+          <i className="fa fa-plus m-r-5" />添加管理看板权限
+        </Button>
+      )}
       {canRemove && (
         <React.Fragment>
           <Divider dashed className="m-t-10 m-b-10" />
@@ -54,6 +66,12 @@ DetailsPageSidebar.propTypes = {
   canAddMembers: PropTypes.bool,
   onAddMembersClick: PropTypes.func,
 
+  canAddManageTargets: PropTypes.bool,
+  onAddManageTargetsClick: PropTypes.func,
+
+  canAddManageBoards: PropTypes.bool,
+  onAddManageBoardsClick: PropTypes.func,
+
   canAddDataSources: PropTypes.bool,
   onAddDataSourcesClick: PropTypes.func,
 
@@ -65,6 +83,12 @@ DetailsPageSidebar.defaultProps = {
 
   canAddMembers: false,
   onAddMembersClick: null,
+
+  canAddManageTargets: false,
+  onAddManageTargetsClick: null,
+
+  canAddManageBoards: false,
+  onAddManageBoardsClick: null,
 
   canAddDataSources: false,
   onAddDataSourcesClick: null,

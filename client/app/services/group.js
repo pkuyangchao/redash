@@ -27,6 +27,32 @@ function GroupService($resource) {
     updateDataSource: {
       method: 'POST', url: 'api/groups/:id/data_sources/:dataSourceId',
     },
+
+    manageTargets: {
+      method: 'GET', cache: false, isArray: true, url: 'api/groups/:id/manage_targets',
+    },
+    addManageTarget: {
+      method: 'POST', url: 'api/groups/:id/manage_targets',
+    },
+    removeManageTarget: {
+      method: 'DELETE', url: 'api/groups/:id/manage_targets/:manageTargetId',
+    },
+    updateManageTarget: {
+      method: 'POST', url: 'api/groups/:id/manage_targets/:manageTargetId',
+    },
+
+    manageBoards: {
+      method: 'GET', cache: false, isArray: true, url: 'api/groups/:id/manage_boards',
+    },
+    addManageBoard: {
+      method: 'POST', url: 'api/groups/:id/manage_boards',
+    },
+    removeManageBoard: {
+      method: 'DELETE', url: 'api/groups/:id/manage_boards/:manageBoardId',
+    },
+    updateManageBoard: {
+      method: 'POST', url: 'api/groups/:id/manage_boards/:manageBoardId',
+    },
   };
   return $resource('api/groups/:id', { id: '@id' }, actions);
 }

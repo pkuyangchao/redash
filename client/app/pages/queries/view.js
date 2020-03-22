@@ -349,7 +349,7 @@ function QueryViewCtrl(
 
     const title = '指标归档';
     const message =
-      '您确定要存档此查询吗？<br/>使用其可视化文件创建的所有监控和模型小部件都将被删除。';
+      '您确定要存档此查询吗？<br/>使用其可视化文件创建的所有监控和看板小部件都将被删除。';
     const confirm = { class: 'btn-warning', title: '归档' };
 
     AlertDialog.open(title, message, confirm).then(archive);
@@ -403,7 +403,7 @@ function QueryViewCtrl(
           $scope.query.visualizations = $scope.query.visualizations.filter(v => vis.id !== v.id);
         },
         () => {
-          notification.error('删除可视化文件时出错，也许它已在模型中使用？');
+          notification.error('删除可视化文件时出错，也许它已在看板中使用？');
         },
       );
     });

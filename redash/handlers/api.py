@@ -14,12 +14,22 @@ from redash.handlers.dashboards import (DashboardFavoriteListResource,
                                         DashboardShareResource,
                                         DashboardTagsResource,
                                         PublicDashboardResource)
+from redash.handlers.manage_boards import (ManageBoardListResource,
+                                          ManageBoardPauseResource,
+                                          ManageBoardResource,
+                                          ManageBoardSchemaResource)
+from redash.handlers.manage_targets import (ManageTargetListResource,
+                                          ManageTargetPauseResource,
+                                          ManageTargetResource,
+                                          ManageTargetSchemaResource)
+
 from redash.handlers.data_sources import (DataSourceListResource,
                                           DataSourcePauseResource,
                                           DataSourceResource,
                                           DataSourceSchemaResource,
                                           DataSourceTestResource,
                                           DataSourceTypeListResource)
+
 from redash.handlers.destinations import (DestinationListResource,
                                           DestinationResource,
                                           DestinationTypeListResource)
@@ -28,6 +38,8 @@ from redash.handlers.favorites import (DashboardFavoriteResource,
                                        QueryFavoriteResource)
 from redash.handlers.groups import (GroupDataSourceListResource,
                                     GroupDataSourceResource, GroupListResource,
+                                    GroupManageTargetListResource,GroupManageTargetResource,
+                                    GroupManageBoardListResource,GroupManageBoardResource,
                                     GroupMemberListResource,
                                     GroupMemberResource, GroupResource)
 from redash.handlers.permissions import (CheckPermissionResource,
@@ -99,6 +111,18 @@ api.add_org_resource(GroupMemberListResource, '/api/groups/<group_id>/members', 
 api.add_org_resource(GroupMemberResource, '/api/groups/<group_id>/members/<user_id>', endpoint='group_member')
 api.add_org_resource(GroupDataSourceListResource, '/api/groups/<group_id>/data_sources', endpoint='group_data_sources')
 api.add_org_resource(GroupDataSourceResource, '/api/groups/<group_id>/data_sources/<data_source_id>', endpoint='group_data_source')
+api.add_org_resource(GroupManageTargetListResource, '/api/groups/<group_id>/manage_targets', endpoint='group_manage_targets')
+api.add_org_resource(GroupManageTargetResource, '/api/groups/<group_id>/manage_targets/<manage_target_id>', endpoint='group_manage_target')
+api.add_org_resource(GroupManageBoardListResource, '/api/groups/<group_id>/manage_boards', endpoint='group_manage_boards')
+api.add_org_resource(GroupManageBoardResource, '/api/groups/<group_id>/manage_boards/<manage_board_id>', endpoint='group_manage_board')
+
+api.add_org_resource(ManageTargetListResource, '/api/manage_targets', endpoint='manage_targets')
+api.add_org_resource(ManageTargetSchemaResource, '/api/manage_targets/<manage_target_id>/schema')
+api.add_org_resource(ManageTargetResource, '/api/manage_targets/<manage_target_id>', endpoint='manage_target')
+
+api.add_org_resource(ManageBoardListResource, '/api/manage_boards', endpoint='manage_boards')
+api.add_org_resource(ManageBoardSchemaResource, '/api/manage_boards/<manage_board_id>/schema')
+api.add_org_resource(ManageBoardResource, '/api/manage_boards/<manage_board_id>', endpoint='manage_board')
 
 api.add_org_resource(EventsResource, '/api/events', endpoint='events')
 

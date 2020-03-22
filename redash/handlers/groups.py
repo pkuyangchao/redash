@@ -207,3 +207,160 @@ class GroupDataSourceResource(BaseResource):
             'object_type': 'group',
             'member_id': data_source.id
         })
+
+
+class GroupManageTargetResource(BaseResource):
+    @require_admin
+    def post(self, group_id, manage_target_id):
+        manage_target = models.Query.get_by_id_and_org(manage_target_id, self.current_org)
+        group = models.Group.get_by_id_and_org(group_id, self.current_org)
+        view_only = request.json['view_only']
+
+        manage_target_group = manage_target.update_group_permission(group, view_only)
+        models.db.session.commit()
+
+        self.record_event({
+            'action': 'change_manage_target_permission',
+            'object_id': group_id,
+            'object_type': 'group',
+            'member_id': manage_target.id,
+            'view_only': view_only
+        })
+
+        return serialize_data_source_with_group(manage_target, manage_target_group)
+
+    @require_admin
+    def delete(self, group_id, manage_target_id):
+        manage_target = models.Query.get_by_id_and_org(manage_target_id, self.current_org)
+        group = models.Group.get_by_id_and_org(group_id, self.current_org)
+
+        manage_target.remove_group(group)
+        models.db.session.commit()
+
+        self.record_event({
+            'action': 'remove_manage_target',
+            'object_id': group_id,
+            'object_type': 'group',
+            'member_id': manage_target.id
+        })
+
+
+class GroupManageTargetListResource(BaseResource):
+    @require_admin
+    def post(self, group_id):
+        try:
+            print (request.json['data_source_id'])
+        except:
+            print ('manage_target')
+            print (request.json['manage_target_id'])
+
+        manage_target_id = request.json['data_source_id']
+        manage_target = models.Query.get_by_id_and_org(manage_target_id, self.current_org)
+        group = models.Group.get_by_id_and_org(group_id, self.current_org)
+
+        manage_target_group = manage_target.add_group(group)
+        models.db.session.commit()
+
+        self.record_event({
+            'action': 'add_manage_target',
+            'object_id': group_id,
+            'object_type': 'group',
+            'member_id': manage_target.id
+        })
+
+        return serialize_data_source_with_group(manage_target, manage_target_group)
+
+    @require_admin
+    def get(self, group_id):
+        group = get_object_or_404(models.Group.get_by_id_and_org, group_id,
+                                  self.current_org)
+
+        # TOOD: move to models
+        manage_targets = (models.Query.query
+                        .join(models.ManageTargetGroup)
+                        .filter(models.ManageTargetGroup.group == group))
+
+        self.record_event({
+            'action': 'list',
+            'object_id': group_id,
+            'object_type': 'group',
+        })
+
+        return [ds.to_dict(with_permissions_for=group) for ds in manage_targets]
+
+class GroupManageBoardResource(BaseResource):
+    @require_admin
+    def post(self, group_id, manage_board_id):
+        manage_board = models.Dashboard.get_by_id_and_org(manage_board_id, self.current_org)
+        group = models.Group.get_by_id_and_org(group_id, self.current_org)
+        view_only = request.json['view_only']
+
+        manage_board_group = manage_board.update_group_permission(group, view_only)
+        models.db.session.commit()
+
+        self.record_event({
+            'action': 'change_manage_board_permission',
+            'object_id': group_id,
+            'object_type': 'group',
+            'member_id': manage_board.id,
+            'view_only': view_only
+        })
+
+        return serialize_data_source_with_group(manage_board, manage_board_group)
+
+    @require_admin
+    def delete(self, group_id, manage_board_id):
+        manage_board = models.Dashboard.get_by_id_and_org(manage_board_id, self.current_org)
+        group = models.Group.get_by_id_and_org(group_id, self.current_org)
+
+        manage_board.remove_group(group)
+        models.db.session.commit()
+
+        self.record_event({
+            'action': 'remove_manage_board',
+            'object_id': group_id,
+            'object_type': 'group',
+            'member_id': manage_board.id
+        })
+
+
+class GroupManageBoardListResource(BaseResource):
+    @require_admin
+    def post(self, group_id):
+        try:
+            print (request.json['data_source_id'])
+        except:
+            print ('manage_board')
+            print (request.json['manage_board_id'])
+
+        manage_board_id = request.json['data_source_id']
+        manage_board = models.Dashboard.get_by_id_and_org(manage_board_id, self.current_org)
+        group = models.Group.get_by_id_and_org(group_id, self.current_org)
+        manage_board_group = manage_board.add_group(group)
+        models.db.session.commit()
+        self.record_event({
+            'action': 'add_manage_board',
+            'object_id': group_id,
+            'object_type': 'group',
+            'member_id': manage_board.id
+        })
+        return serialize_data_source_with_group(manage_board, manage_board_group)
+
+    @require_admin
+    def get(self, group_id):
+        group = get_object_or_404(models.Group.get_by_id_and_org, group_id,
+                                  self.current_org)
+
+        # TOOD: move to models
+        manage_boards = (models.Dashboard.query
+                        .join(models.ManageBoardGroup)
+                        .filter(models.ManageBoardGroup.group == group))
+        # print (manage_boards)
+        self.record_event({
+            'action': 'list',
+            'object_id': group_id,
+            'object_type': 'group',
+        })
+        # print([ds.to_dict(with_permissions_for=group) for ds in manage_boards])
+
+        return [ds.to_dict(with_permissions_for=group) for ds in manage_boards]

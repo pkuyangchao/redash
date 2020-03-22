@@ -399,6 +399,9 @@ class Query(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model):
                                                  'description': 'C',
                                                  'query': 'D'}),
                            nullable=True)
+
+    manage_target_groups = db.relationship("ManageTargetGroup", back_populates="manage_target",
+                                         cascade="all")
     tags = Column('tags', MutableList.as_mutable(postgresql.ARRAY(db.Unicode)), nullable=True)
 
     query_class = SearchBaseQuery
@@ -429,6 +432,26 @@ class Query(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model):
     def regenerate_api_key(self):
         self.api_key = generate_token(40)
 
+    def add_group(self, group, view_only=False):
+        dsg = ManageTargetGroup(group=group, manage_target=self, view_only=view_only)
+        db.session.add(dsg)
+        return dsg
+
+    def remove_group(self, group):
+        ManageTargetGroup.query.filter(
+            ManageTargetGroup.group == group,
+            ManageTargetGroup.manage_target == self
+        ).delete()
+        db.session.commit()
+
+    def update_group_permission(self, group, view_only):
+        dsg = ManageTargetGroup.query.filter(
+            ManageTargetGroup.group == group,
+            ManageTargetGroup.manage_target == self).one()
+        dsg.view_only = view_only
+        db.session.add(dsg)
+        return dsg
+
     @classmethod
     def create(cls, **kwargs):
         query = cls(**kwargs)
@@ -438,6 +461,37 @@ class Query(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model):
                                      type="TABLE",
                                      options="{}"))
         return query
+
+    @classmethod
+    def all(cls, org, group_ids=None):
+        manage_targets = cls.query.filter(cls.org == org).order_by(cls.id.asc())
+
+        if group_ids:
+            manage_targets = manage_targets.join(ManageTargetGroup).filter(
+                ManageTargetGroup.group_id.in_(group_ids))
+
+        return manage_targets.distinct()
+
+    def to_dict(self, all=False, with_permissions_for=None):
+        d = {
+            'id': self.id,
+            'name': self.name
+        }
+
+        if all:
+            schema = get_configuration_schema_for_query_runner_type(self.type)
+            self.options.set_schema(schema)
+            d['options'] = self.options.to_dict(mask_secrets=True)
+            d['queue_name'] = self.queue_name
+            d['scheduled_queue_name'] = self.scheduled_queue_name
+            d['groups'] = self.groups
+
+        if with_permissions_for is not None:
+            d['view_only'] = db.session.query(ManageTargetGroup.view_only).filter(
+                ManageTargetGroup.group == with_permissions_for,
+                ManageTargetGroup.manage_target == self).one()[0]
+
+        return d
 
     @classmethod
     def all_queries(cls, group_ids, user_id=None, include_drafts=False, include_archived=False):
@@ -870,6 +924,8 @@ class Dashboard(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model
     is_archived = Column(db.Boolean, default=False, index=True)
     is_draft = Column(db.Boolean, default=True, index=True)
     widgets = db.relationship('Widget', backref='dashboard', lazy='dynamic')
+    manage_board_groups = db.relationship("ManageBoardGroup", back_populates="manage_board",
+                                          cascade="all")
     tags = Column('tags', MutableList.as_mutable(postgresql.ARRAY(db.Unicode)), nullable=True)
 
     __tablename__ = 'dashboards'
@@ -879,6 +935,27 @@ class Dashboard(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model
 
     def __str__(self):
         return u"%s=%s" % (self.id, self.name)
+
+
+    def add_group(self, group, view_only=False):
+        dsg = ManageBoardGroup(group=group, manage_board=self, view_only=view_only)
+        db.session.add(dsg)
+        return dsg
+
+    def remove_group(self, group):
+        ManageBoardGroup.query.filter(
+            ManageBoardGroup.group == group,
+            ManageBoardGroup.manage_board == self
+        ).delete()
+        db.session.commit()
+
+    def update_group_permission(self, group, view_only):
+        dsg = ManageBoardGroup.query.filter(
+            ManageBoardGroup.group == group,
+            ManageBoardGroup.manage_board == self).one()
+        dsg.view_only = view_only
+        db.session.add(dsg)
+        return dsg
 
     @classmethod
     def all(cls, org, group_ids, user_id):
@@ -923,6 +1000,27 @@ class Dashboard(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model
             .order_by(usage_count.desc())
         )
         return query
+
+    def to_dict(self, all=False, with_permissions_for=None):
+        d = {
+            'id': self.id,
+            'name': self.name
+        }
+
+        if all:
+            schema = get_configuration_schema_for_query_runner_type(self.type)
+            self.options.set_schema(schema)
+            d['options'] = self.options.to_dict(mask_secrets=True)
+            d['queue_name'] = self.queue_name
+            d['scheduled_queue_name'] = self.scheduled_queue_name
+            d['groups'] = self.groups
+
+        if with_permissions_for is not None:
+            d['view_only'] = db.session.query(ManageBoardGroup.view_only).filter(
+                ManageBoardGroup.group == with_permissions_for,
+                ManageBoardGroup.manage_board == self).one()[0]
+
+        return d
 
     @classmethod
     def favorites(cls, user, base_query=None):
@@ -1221,6 +1319,30 @@ class QuerySnippet(TimestampMixin, db.Model, BelongsToOrgMixin):
 
         return d
 
+
+@generic_repr('id', 'manage_target_id', 'group_id', 'view_only')
+class ManageTargetGroup(db.Model):
+    # XXX drop id, use datasource/group as PK
+    id = Column(db.Integer, primary_key=True)
+    manage_target_id = Column(db.Integer, db.ForeignKey("queries.id"))
+    manage_target = db.relationship(Query, back_populates="manage_target_groups")
+
+    group_id = Column(db.Integer, db.ForeignKey("groups.id"))
+    group = db.relationship(Group, back_populates="queries")
+    view_only = Column(db.Boolean, default=False)
+    __tablename__ = "manage_target_groups"
+
+
+@generic_repr('id', 'manage_board_id', 'group_id', 'view_only')
+class ManageBoardGroup(db.Model):
+    # XXX drop id, use datasource/group as PK
+    id = Column(db.Integer, primary_key=True)
+    manage_board_id = Column(db.Integer, db.ForeignKey("dashboards.id"))
+    manage_board = db.relationship(Dashboard, back_populates="manage_board_groups")
+    group_id = Column(db.Integer, db.ForeignKey("groups.id"))
+    group = db.relationship(Group, back_populates="dashboards")
+    view_only = Column(db.Boolean, default=False)
+    __tablename__ = "manage_board_groups"
 
 def init_db():
     default_org = Organization(name="Default", slug='default', settings={})
