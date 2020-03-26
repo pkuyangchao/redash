@@ -108,7 +108,7 @@ function DashboardWidgetCtrl($scope, $location, $uibModal, $window, $rootScope, 
     this.type = 'visualization';
     this.load();
   } else if (this.widget.restricted) {
-    this.type = 'restricted';
+    this.type = 'textbox';//    this.type = 'restricted';
   } else {
     this.type = 'textbox';
   }

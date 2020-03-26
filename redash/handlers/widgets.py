@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from flask import request
+import logging
+from funcy import project
+from redash.handlers.base import get_object_or_404
 
 from redash import models
 from redash.handlers.base import BaseResource
@@ -27,7 +30,22 @@ class WidgetListResource(BaseResource):
         """
         widget_properties = request.get_json(force=True)
         dashboard = models.Dashboard.get_by_id_and_org(widget_properties.get('dashboard_id'), self.current_org)
-        require_object_modify_permission(dashboard, self.current_user)
+
+        flag = True
+        manage_boards = models.Dashboard.queries(self.current_org, self.current_user.group_ids, self.current_user.id)
+        for group_id in self.current_user.group_ids:
+            group = get_object_or_404(models.Group.get_by_id_and_org, group_id,
+                                      self.current_org)
+            try:
+                d = [ds.to_dict(with_permissions_for=group) for ds in manage_boards]
+                for item in d:
+                    if item['view_only'] == False and item['id'] == dashboard.id:
+                        flag = False
+            except:
+                pass
+
+        if flag:
+            require_object_modify_permission(dashboard, self.current_user)
 
         widget_properties['options'] = json_dumps(widget_properties['options'])
         widget_properties.pop('id', None)
@@ -61,7 +79,23 @@ class WidgetResource(BaseResource):
         :<json string text: The new contents of the text box
         """
         widget = models.Widget.get_by_id_and_org(widget_id, self.current_org)
-        require_object_modify_permission(widget.dashboard, self.current_user)
+
+        flag = True
+        manage_boards = models.Dashboard.queries(self.current_org, self.current_user.group_ids, self.current_user.id)
+        for group_id in self.current_user.group_ids:
+            group = get_object_or_404(models.Group.get_by_id_and_org, group_id,
+                                      self.current_org)
+            try:
+                d = [ds.to_dict(with_permissions_for=group) for ds in manage_boards]
+                for item in d:
+                    if item['view_only'] == False and item['id'] == widget.dashboard.id:
+                        flag = False
+            except:
+                pass
+
+        if flag:
+            require_object_modify_permission(widget.dashboard, self.current_user)
+
         widget_properties = request.get_json(force=True)
         widget.text = widget_properties['text']
         widget.options = json_dumps(widget_properties['options'])

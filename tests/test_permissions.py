@@ -67,3 +67,10 @@ class TestHasAccess(BaseTestCase):
         user = models.ApiUser(api_key, None, [])
 
         self.assertTrue(has_access(query, user, view_only))
+
+    #按分组显示内容
+    def test_allows_access_to_query_by_group_api_key(self):
+        query = self.factory.search_query()
+        user = models.ApiUser(query.api_key, None, [])
+
+        self.assertTrue(has_access(query, user, view_only))

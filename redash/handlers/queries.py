@@ -241,6 +241,14 @@ class QueryListResource(BaseQueryListResource):
         models.db.session.add(query)
         models.db.session.commit()
 
+        # for group_id in self.current_user.group_ids:
+        #     manage_target = models.Query.get_by_id_and_org(query.id, self.current_org)
+        #     print (manage_target)
+        #     group = models.Group.get_by_id_and_org(group_id, self.current_org)
+        #
+        #     manage_target_group = manage_target.add_group(group)
+        #     models.db.session.commit()
+
         self.record_event({
             'action': 'create',
             'object_id': query.id,
@@ -325,6 +333,7 @@ class QueryResource(BaseResource):
 
         Responds with the updated :ref:`query <query-response-label>` object.
         """
+
         query = get_object_or_404(models.Query.get_by_id_and_org, query_id, self.current_org)
         query_def = request.get_json(force=True)
 
@@ -366,9 +375,33 @@ class QueryResource(BaseResource):
         Responds with the :ref:`query <query-response-label>` contents.
         """
         q = get_object_or_404(models.Query.get_by_id_and_org, query_id, self.current_org)
-        require_access(q, self.current_user, view_only)
+
+        search_term = request.args.get('q')
+        if search_term:
+            results = models.Query.search_by_user(search_term, self.current_user)
+        else:
+            results = models.Query.by_user(self.current_user)
+        results = filter_by_tags(results, models.Query.tags)
+        ordered_results = order_results(results, fallback=not bool(search_term))
+        page = request.args.get('page', 1, type=int)
+        page_size = request.args.get('page_size', 25, type=int)
+        response = paginate(
+            ordered_results,
+            page,
+            page_size,
+            QuerySerializer,
+            with_stats=True,
+            with_last_modified_by=False,
+        )
+        ids = []
+        for r in response['results']:
+            ids.append(r['id'])
+
+        if q.id not in ids:
+            require_access(q, self.current_user, view_only)
 
         result = QuerySerializer(q, with_visualizations=True).serialize()
+
         result['can_edit'] = can_modify(q, self.current_user)
 
         self.record_event({
@@ -502,6 +535,63 @@ class QueryFavoriteListResource(BaseResource):
             with_stats=True,
             with_last_modified_by=False,
         )
+
+        self.record_event({
+            'action': 'load_favorites',
+            'object_type': 'query',
+            'params': {
+                'q': search_term,
+                'tags': request.args.getlist('tags'),
+                'page': page
+            }
+        })
+
+        return response
+
+class QueryQueriesListResource(BaseResource):
+    def get(self):
+        search_term = request.args.get('q')
+        if search_term:
+            base_query = models.Query.search(search_term, self.current_user.group_ids, include_drafts=True, limit=None)
+            queries = models.Query.queries(self.current_user, base_query=base_query)
+            results = models.Query.search_by_user(search_term, self.current_user)
+        else:
+            queries = models.Query.queries(self.current_user)
+            results = models.Query.by_user(self.current_user)
+
+        queries = filter_by_tags(queries, models.Query.tags)
+        results = filter_by_tags(results, models.Query.tags)
+
+        # order results according to passed order parameter,
+        # special-casing search queries where the database
+        # provides an order by search rank
+        ordered_queries = order_results(queries, fallback=not bool(search_term))
+        ordered_results = order_results(results, fallback=not bool(search_term))
+
+        page = request.args.get('page', 1, type=int)
+        page_size = request.args.get('page_size', 25, type=int)
+        response = paginate(
+            ordered_queries,
+            page,
+            page_size,
+            QuerySerializer,
+            with_stats=True,
+            with_last_modified_by=False,
+        )
+        response_by_user = paginate(
+            ordered_results,
+            page,
+            page_size,
+            QuerySerializer,
+            with_stats=True,
+            with_last_modified_by=False,
+        )
+
+        for r in response_by_user['results']:
+            if r in response['results']:
+                continue
+            else:
+                response['results'].append(r)
 
         self.record_event({
             'action': 'load_favorites',

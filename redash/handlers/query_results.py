@@ -26,7 +26,8 @@ error_messages = {
     'unsafe_when_shared': error_response('This query contains potentially unsafe parameters and cannot be executed on a shared dashboard or an embedded visualization.', 403),
     'unsafe_on_view_only': error_response('This query contains potentially unsafe parameters and cannot be executed with read-only access to this data source.', 403),
     'no_permission': error_response('You do not have permission to run queries with this data source.', 403),
-    'select_data_source': error_response('Please select data source to run this query.', 401)
+    'select_data_source': error_response('Please select data source to run this query.', 401),
+    'select_query': error_response('Please select query to run this query.', 401)
 }
 
 
@@ -71,7 +72,6 @@ def run_query(query, parameters, data_source, query_id, max_age=0):
         })
         return {'job': job.to_dict()}
 
-
 def get_download_filename(query_result, query, filetype):
     retrieved_at = query_result.retrieved_at.strftime("%Y_%m_%d")
     if query:
@@ -110,12 +110,21 @@ class QueryResultListResource(BaseResource):
         parameterized_query = ParameterizedQuery(query, org=self.current_org)
 
         data_source_id = params.get('data_source_id')
+
         if data_source_id:
             data_source = models.DataSource.get_by_id_and_org(params.get('data_source_id'), self.current_org)
         else:
             return error_messages['select_data_source']
 
+        if query_id:
+            query = models.Query.get_by_id_and_org(params.get('query_id'), self.current_org)
+        else:
+            return error_messages['select_query']
+
         if not has_access(data_source, self.current_user, not_view_only):
+            return error_messages['no_permission']
+
+        if not has_access(query, self.current_user, not_view_only):
             return error_messages['no_permission']
 
         return run_query(parameterized_query, parameters, data_source, query_id, max_age)
@@ -194,6 +203,9 @@ class QueryResultResource(BaseResource):
         query = get_object_or_404(models.Query.get_by_id_and_org, query_id, self.current_org)
 
         allow_executing_with_view_only_permissions = query.parameterized.is_safe
+
+        if query.user_id == self.current_user.id:
+            return run_query(query.parameterized, parameter_values, query.data_source, query_id, max_age)
 
         if has_access(query, self.current_user, allow_executing_with_view_only_permissions):
             return run_query(query.parameterized, parameter_values, query.data_source, query_id, max_age)

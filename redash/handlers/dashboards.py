@@ -150,7 +150,6 @@ class DashboardResource(BaseResource):
         """
         dashboard = get_object_or_404(models.Dashboard.get_by_slug_and_org, dashboard_slug, self.current_org)
         response = serialize_dashboard(dashboard, with_widgets=True, user=self.current_user)
-
         api_key = models.ApiKey.get_by_object(dashboard)
         if api_key:
             response['public_url'] = url_for('redash.public_dashboard', token=api_key.api_key, org_slug=self.current_org.slug, _external=True)
@@ -158,13 +157,27 @@ class DashboardResource(BaseResource):
 
         response['can_edit'] = can_modify(dashboard, self.current_user)
 
+        for group_id in self.current_user.group_ids:
+            group = get_object_or_404(models.Group.get_by_id_and_org, group_id,
+                                  self.current_org)
+            manage_boards = (models.Dashboard.query
+                             .join(models.ManageBoardGroup)
+                             .filter(models.ManageBoardGroup.group == group))
+
+            ds_dict = [ds.to_dict(with_permissions_for=group) for ds in manage_boards]
+            for item in ds_dict:
+                if item['id'] == response['id']:
+                    response['can_edit'] = True
+
         self.record_event({
             'action': 'view',
             'object_id': dashboard.id,
             'object_type': 'dashboard',
         })
-
-        return response
+        if response['can_edit'] == True:
+            return response
+        else:
+            abort(403)
 
     @require_permission('edit_dashboard')
     def post(self, dashboard_slug):

@@ -46,6 +46,7 @@ from redash.handlers.permissions import (CheckPermissionResource,
                                          ObjectPermissionsListResource)
 from redash.handlers.queries import (MyQueriesResource, QueryArchiveResource,
                                      QueryFavoriteListResource,
+                                     QueryQueriesListResource,
                                      QueryForkResource, QueryListResource,
                                      QueryRecentResource, QueryRefreshResource,
                                      QueryResource, QuerySearchResource,
@@ -127,6 +128,7 @@ api.add_org_resource(ManageBoardResource, '/api/manage_boards/<manage_board_id>'
 api.add_org_resource(EventsResource, '/api/events', endpoint='events')
 
 api.add_org_resource(QueryFavoriteListResource, '/api/queries/favorites', endpoint='query_favorites')
+api.add_org_resource(QueryQueriesListResource, '/api/queries/queries', endpoint='query_queries')
 api.add_org_resource(QueryFavoriteResource, '/api/queries/<query_id>/favorite', endpoint='query_favorite')
 api.add_org_resource(DashboardFavoriteListResource, '/api/dashboards/favorites', endpoint='dashboard_favorites')
 api.add_org_resource(DashboardFavoriteResource, '/api/dashboards/<object_id>/favorite', endpoint='dashboard_favorite')

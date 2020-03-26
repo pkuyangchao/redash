@@ -552,6 +552,18 @@ class Query(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model):
         )).filter(Favorite.user_id == user.id)
 
     @classmethod
+    def queries(cls, user, base_query=None):
+        if base_query is None:
+            base_query = cls.all_queries(user.group_ids, user.id, include_drafts=True)
+
+        return base_query.join((
+                ManageTargetGroup,
+                and_(
+                    ManageTargetGroup.manage_target_id == Query.id,
+                )
+            )).filter(ManageTargetGroup.group_id.in_(user.group_ids))
+
+    @classmethod
     def all_tags(cls, user, include_drafts=False):
         queries = cls.all_queries(
             group_ids=user.group_ids,
@@ -721,12 +733,27 @@ class Query(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model):
     def retrieved_at(self):
         return self.latest_query_data.retrieved_at
 
+    # @property
+    # def groups(self):
+    #     if self.data_source is None:
+    #         return {}
+    #
+    #     return self.data_source.groups
+
     @property
     def groups(self):
         if self.data_source is None:
             return {}
 
-        return self.data_source.groups
+        # groups = DataSourceGroup.query.filter(
+        #     DataSourceGroup.data_source == self
+        # )
+
+        queries = ManageTargetGroup.query.filter(
+            ManageTargetGroup.manage_target == self
+        )
+
+        return dict(map(lambda g: (g.group_id, g.view_only), queries))
 
     @hybrid_property
     def lowercase_name(self):
@@ -981,6 +1008,17 @@ class Dashboard(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model
         return query
 
     @classmethod
+    def queries(cls, org, groups_ids, user_id):
+        base_query = cls.all(org, groups_ids, user_id)
+        return base_query.join((
+            ManageBoardGroup,
+            and_(
+                ManageBoardGroup.manage_board_id == Dashboard.id,
+            )
+        )).filter(ManageBoardGroup.group_id.in_(groups_ids))
+
+
+    @classmethod
     def search(cls, org, groups_ids, user_id, search_term):
         # TODO: switch to FTS
         return cls.all(org, groups_ids, user_id).filter(cls.name.ilike(u'%{}%'.format(search_term)))
@@ -1004,7 +1042,7 @@ class Dashboard(ChangeTrackingMixin, TimestampMixin, BelongsToOrgMixin, db.Model
     def to_dict(self, all=False, with_permissions_for=None):
         d = {
             'id': self.id,
-            'name': self.name
+            'name': self.name,
         }
 
         if all:

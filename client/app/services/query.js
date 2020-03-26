@@ -589,7 +589,9 @@ function QueryResource(
         url: 'api/queries/archive',
       },
       query: {
+        method: 'get',
         isArray: false,
+        url: 'api/queries/queries',
       },
       myQueries: {
         method: 'get',

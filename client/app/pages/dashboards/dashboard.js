@@ -171,7 +171,8 @@ function DashboardCtrl(
       { slug: $routeParams.dashboardSlug },
       (dashboard) => {
         this.dashboard = dashboard;
-        this.isDashboardOwner = currentUser.id === dashboard.user.id || currentUser.hasPermission('admin');
+        this.isDashboardOwner = currentUser.id === dashboard.user.id || currentUser.hasPermission('admin') || currentUser.hasPermission('list_dashboards');
+
         Events.record('view', 'dashboard', dashboard.id);
         renderDashboard(dashboard, force);
 
